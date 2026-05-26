@@ -52,10 +52,6 @@
                 Security
             </button>
 
-            <button onclick="setPrompt('Bash script generator')">
-                Scripts
-            </button>
-
             <button onclick="showCVBuilder()">
                 AI Resume Builder
             </button>
@@ -134,35 +130,45 @@
 
 
 
-        <!-- TOOLS -->
+        <!-- TOOL CARDS -->
 
         <div class="tools-row">
 
             <div class="tool-card">
 
-                <h3>Error Analyzer</h3>
+                <h3>Whisper AI Voice Assistant</h3>
 
-                <textarea
-                id="error-input"
-                placeholder="Paste Linux, Docker, AWS or Nginx errors here..."></textarea>
+                <p>
+                    Speak naturally using OpenAI Whisper.
+                </p>
 
-                <button onclick="analyzeError()">
-                    Analyze Error
+                <br>
+
+                <button id="record-btn">
+
+                    🎤 Start Recording
+
                 </button>
 
             </div>
 
             <div class="tool-card">
 
-                <h3>Upload Log File</h3>
+                <h3>AI Features</h3>
 
-                <input type="file" id="log-file">
+                <ul>
 
-                <br><br>
+                    <li>Voice AI</li>
 
-                <button onclick="uploadLog()">
-                    Analyze Logs
-                </button>
+                    <li>Interview Simulator</li>
+
+                    <li>Skill Assessment</li>
+
+                    <li>CV Builder</li>
+
+                    <li>Linux & AWS Assistant</li>
+
+                </ul>
 
             </div>
 
@@ -227,31 +233,23 @@
 
                 <br><br>
 
-                Welcome to your personal DevOps AI platform.
+                Welcome to your advanced DevOps AI platform.
 
                 <br><br>
 
-                I can help you with:
+                Features enabled:
 
                 <ul>
 
-                    <li>Linux troubleshooting</li>
+                    <li>Whisper Voice AI 🎤</li>
 
-                    <li>AWS infrastructure</li>
+                    <li>AI Interview System</li>
 
-                    <li>Docker & containers</li>
+                    <li>Skill Assessments</li>
 
-                    <li>Nginx & web servers</li>
+                    <li>AI Resume Builder</li>
 
-                    <li>Security & networking</li>
-
-                    <li>Bash scripts</li>
-
-                    <li>AI resume generation</li>
-
-                    <li>Mock interviews</li>
-
-                    <li>Voice AI assistant</li>
+                    <li>Linux & AWS Assistant</li>
 
                 </ul>
 
@@ -274,99 +272,6 @@
                 Send
             </button>
 
-            <button id="voice-btn"
-            onclick="startVoiceRecognition()">
-
-                🎤
-
-            </button>
-
-        </div>
-
-
-
-        <!-- QUIZ MODAL -->
-
-        <div id="quiz-modal" class="modal">
-
-            <div class="modal-content">
-
-                <span class="close-btn"
-                onclick="closeQuiz()">
-                    &times;
-                </span>
-
-                <h2>DevOps Skill Assessment</h2>
-
-                <br>
-
-                <div id="quiz-question"></div>
-
-                <div id="quiz-options"></div>
-
-                <br>
-
-                <button onclick="nextQuestion()">
-                    Next Question
-                </button>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- INTERVIEW MODAL -->
-
-        <div id="interview-modal" class="modal">
-
-            <div class="modal-content">
-
-                <span class="close-btn"
-                onclick="closeInterview()">
-                    &times;
-                </span>
-
-                <h2>AI Interview Simulator</h2>
-
-                <br>
-
-                <select id="job-role">
-
-                    <option>
-                        DevOps Engineer
-                    </option>
-
-                    <option>
-                        Linux Administrator
-                    </option>
-
-                    <option>
-                        AWS Cloud Engineer
-                    </option>
-
-                    <option>
-                        Helpdesk Technician
-                    </option>
-
-                    <option>
-                        Security Analyst
-                    </option>
-
-                </select>
-
-                <br><br>
-
-                <button onclick="startInterview()">
-                    Start Interview
-                </button>
-
-                <br><br>
-
-                <div id="interview-content"></div>
-
-            </div>
-
         </div>
 
 
@@ -380,8 +285,8 @@
                 <h3>DevOps AI Platform</h3>
 
                 <p>
-                    AI-powered DevOps assistant for Linux,
-                    AWS, Docker and cloud troubleshooting.
+                    AI-powered DevOps assistant
+                    with OpenAI Whisper + GPT.
                 </p>
 
             </div>
@@ -408,7 +313,7 @@
 
                 <h4>Version</h4>
 
-                <p>Version 2.0</p>
+                <p>Version 3.0</p>
 
                 <p>Powered by OpenAI & AWS</p>
 

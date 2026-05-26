@@ -1,182 +1,252 @@
-const input = document.getElementById("user-input");
+const input =
+document.getElementById("user-input");
 
+const recordBtn =
+document.getElementById("record-btn");
 
-/* =========================
-   ENTER KEY
-========================= */
+let mediaRecorder;
 
-input.addEventListener("keypress", function(event) {
+let audioChunks = [];
 
-    if (event.key === "Enter") {
-
-        sendMessage();
-    }
-});
 
 
 /* =========================
-   MAIN CHAT
+   SEND MESSAGE
 ========================= */
 
 async function sendMessage() {
 
     let chatBox =
-        document.getElementById("chat-box");
+    document.getElementById("chat-box");
 
     let userMessage =
-        input.value;
+    input.value;
 
     if (userMessage.trim() === "") {
         return;
     }
 
     chatBox.innerHTML += `
-        <div class="message user">
 
-            <strong>You</strong>
+    <div class="message user">
 
-            <br><br>
+        <strong>You</strong>
 
-            ${userMessage}
+        <br><br>
 
-        </div>
+        ${userMessage}
+
+    </div>
     `;
 
     input.value = "";
 
     chatBox.innerHTML += `
-        <div class="message ai" id="loading">
 
-            <div class="typing">
+    <div class="message ai" id="loading">
 
-                <span></span>
-                <span></span>
-                <span></span>
+        AI is thinking...
 
-            </div>
-
-        </div>
+    </div>
     `;
 
-    chatBox.scrollTop =
-        chatBox.scrollHeight;
-
-
-    const response = await fetch("/chat", {
+    const response =
+    await fetch("/chat", {
 
         method: "POST",
 
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type":
+            "application/json"
         },
 
         body: JSON.stringify({
+
             message: userMessage
         })
     });
 
-
     const data =
-        await response.json();
+    await response.json();
 
     document
-        .getElementById("loading")
-        .remove();
-
-
-    const renderedMarkdown =
-        marked.parse(data.response);
-
+    .getElementById("loading")
+    .remove();
 
     chatBox.innerHTML += `
-        <div class="message ai">
 
-            <strong>
-                DevOps AI
-            </strong>
+    <div class="message ai">
 
-            <button class="copy-btn"
-            onclick="copyText(this)">
-                Copy
-            </button>
+        <strong>
+        DevOps AI
+        </strong>
 
-            <br><br>
+        <br><br>
 
-            <div class="markdown-body">
+        <div id="latest-ai-response">
 
-                ${renderedMarkdown}
-
-            </div>
+            ${marked.parse(data.response)}
 
         </div>
+
+        <br>
+
+        <button onclick="downloadCVPDF()">
+
+            📄 Download PDF
+
+        </button>
+
+    </div>
     `;
-
-    chatBox.scrollTop =
-        chatBox.scrollHeight;
-
 
     speakText(data.response);
 
-
-    document.querySelectorAll(
-        "pre code"
-    ).forEach((el) => {
-
-        hljs.highlightElement(el);
-    });
+    chatBox.scrollTop =
+    chatBox.scrollHeight;
 }
 
 
 
 /* =========================
-   VOICE RECOGNITION
+   DOWNLOAD PDF
 ========================= */
 
-function startVoiceRecognition() {
+async function downloadCVPDF() {
 
-    const recognition =
-        new (
-            window.SpeechRecognition ||
-            window.webkitSpeechRecognition
-        )();
-
-    recognition.lang = "en-US";
-
-    recognition.start();
-
+    const cvText =
     document.getElementById(
-        "voice-btn"
-    ).innerText = "🎙️";
+        "latest-ai-response"
+    ).innerText;
 
+    const response =
+    await fetch(
+        "/generate-cv-pdf",
+        {
 
-    recognition.onresult = function(event) {
+            method: "POST",
 
-        const transcript =
-            event.results[0][0].transcript;
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
 
-        document.getElementById(
-            "user-input"
-        ).value = transcript;
+            body: JSON.stringify({
 
-        document.getElementById(
-            "voice-btn"
-        ).innerText = "🎤";
+                cv_text: cvText
+            })
+        }
+    );
 
-        sendMessage();
-    };
+    const blob =
+    await response.blob();
 
+    const url =
+    window.URL.createObjectURL(blob);
 
-    recognition.onerror = function() {
+    const a =
+    document.createElement("a");
 
-        document.getElementById(
-            "voice-btn"
-        ).innerText = "🎤";
+    a.href = url;
 
-        alert(
-            "Voice recognition failed."
-        );
-    };
+    a.download = "AI_CV.pdf";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
 }
+
+
+
+/* =========================
+   VOICE RECORDING
+========================= */
+
+recordBtn.addEventListener(
+"click",
+async () => {
+
+    if (
+        recordBtn.innerText ===
+        "🎤 Start Recording"
+    ) {
+
+        const stream =
+        await navigator.mediaDevices
+        .getUserMedia({
+
+            audio: true
+        });
+
+        mediaRecorder =
+        new MediaRecorder(stream);
+
+        mediaRecorder.start();
+
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable =
+        event => {
+
+            audioChunks.push(
+                event.data
+            );
+        };
+
+        recordBtn.innerText =
+        "⏹ Stop Recording";
+
+    } else {
+
+        mediaRecorder.stop();
+
+        mediaRecorder.onstop =
+        async () => {
+
+            const audioBlob =
+            new Blob(audioChunks, {
+
+                type: "audio/webm"
+            });
+
+            const formData =
+            new FormData();
+
+            formData.append(
+                "audio",
+                audioBlob,
+                "recording.webm"
+            );
+
+            recordBtn.innerText =
+            "⌛ Processing";
+
+            const response =
+            await fetch(
+                "/transcribe",
+                {
+
+                    method: "POST",
+
+                    body: formData
+                }
+            );
+
+            const data =
+            await response.json();
+
+            input.value =
+            data.text;
+
+            recordBtn.innerText =
+            "🎤 Start Recording";
+
+            sendMessage();
+        };
+    }
+});
 
 
 
@@ -187,41 +257,14 @@ function startVoiceRecognition() {
 function speakText(text) {
 
     const speech =
-        new SpeechSynthesisUtterance();
+    new SpeechSynthesisUtterance();
 
     speech.text = text;
 
     speech.lang = "en-US";
 
-    speech.rate = 1;
-
-    speech.pitch = 1;
-
-    window.speechSynthesis.speak(
-        speech
-    );
-}
-
-
-
-/* =========================
-   COPY BUTTON
-========================= */
-
-function copyText(button) {
-
-    const text =
-        button.parentElement.innerText;
-
-    navigator.clipboard.writeText(text);
-
-    button.innerText = "Copied!";
-
-    setTimeout(() => {
-
-        button.innerText = "Copy";
-
-    }, 2000);
+    window.speechSynthesis
+    .speak(speech);
 }
 
 
@@ -229,16 +272,6 @@ function copyText(button) {
 /* =========================
    QUICK TOOLS
 ========================= */
-
-function quickAsk(text) {
-
-    document.getElementById(
-        "user-input"
-    ).value = text;
-
-    sendMessage();
-}
-
 
 function setPrompt(text) {
 
@@ -250,26 +283,27 @@ function setPrompt(text) {
 
 
 /* =========================
-   ERROR ANALYZER
+   QUIZ PLACEHOLDER
 ========================= */
 
-function analyzeError() {
+function showQuiz() {
 
-    let errorText =
-        document.getElementById(
-            "error-input"
-        ).value;
+    alert(
+    "Quiz system coming soon."
+    );
+}
 
-    if (errorText.trim() === "") {
-        return;
-    }
 
-    document.getElementById(
-        "user-input"
-    ).value =
-        `Analyze this error:\n\n${errorText}`;
 
-    sendMessage();
+/* =========================
+   INTERVIEW PLACEHOLDER
+========================= */
+
+function showInterview() {
+
+    alert(
+    "AI Interview system ready soon."
+    );
 }
 
 
@@ -280,57 +314,9 @@ function analyzeError() {
 
 function showCVBuilder() {
 
-    document.getElementById(
-        "cv-builder"
-    ).style.display = "block";
-
-    document.getElementById(
-        "chat-box"
-    ).scrollIntoView({
-        behavior: "smooth"
-    });
-}
-
-
-async function generateCV() {
-
-    let name =
-        document.getElementById(
-            "cv-name"
-        ).value;
-
-    let skills =
-        document.getElementById(
-            "cv-skills"
-        ).value;
-
-    let experience =
-        document.getElementById(
-            "cv-experience"
-        ).value;
-
-    let education =
-        document.getElementById(
-            "cv-education"
-        ).value;
-
-
-    let prompt = `
-Create a professional ATS-friendly resume.
-
-Name:
-${name}
-
-Skills:
-${skills}
-
-Experience:
-${experience}
-
-Education:
-${education}
+    const prompt = `
+Create a professional ATS-friendly DevOps resume template.
 `;
-
 
     document.getElementById(
         "user-input"

@@ -1,5 +1,15 @@
-from flask import Flask, render_template, request, jsonify, redirect, flash
+from flask import (
+    Flask,
+    render_template,
+    request,
+    jsonify,
+    redirect,
+    flash,
+    send_file
+)
+
 from flask_sqlalchemy import SQLAlchemy
+
 from flask_login import (
     LoginManager,
     UserMixin,
@@ -15,6 +25,14 @@ from werkzeug.security import (
 )
 
 from dotenv import load_dotenv
+
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer
+)
+
+from reportlab.lib.styles import getSampleStyleSheet
 
 import openai
 import os
@@ -95,6 +113,33 @@ class User(UserMixin, db.Model):
     )
 
 
+# =========================
+# CHAT MEMORY MODEL
+# =========================
+
+class ChatHistory(db.Model):
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    user_message = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    ai_response = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+
 @login_manager.user_loader
 def load_user(user_id):
 
@@ -153,7 +198,6 @@ def register():
 
         password = request.form["password"]
 
-
         if not validate_password(password):
 
             flash("""
@@ -166,7 +210,6 @@ Password must:
 
             return redirect("/register")
 
-
         existing_user = User.query.filter_by(
             email=email
         ).first()
@@ -177,13 +220,11 @@ Password must:
 
             return redirect("/register")
 
-
         hashed_password = generate_password_hash(
             password
         )
 
         is_first_user = User.query.count() == 0
-
 
         user = User(
             username=username,
@@ -252,7 +293,7 @@ def logout():
 
 
 # =========================
-# MAIN CHAT API
+# CHAT API + MEMORY
 # =========================
 
 @app.route("/chat", methods=["POST"])
@@ -262,6 +303,28 @@ def chat():
     data = request.json
 
     user_message = data["message"]
+
+    previous_chats = (
+        ChatHistory.query
+        .filter_by(user_id=current_user.id)
+        .order_by(ChatHistory.id.desc())
+        .limit(5)
+        .all()
+    )
+
+    memory_context = ""
+
+    for chat_item in reversed(previous_chats):
+
+        memory_context += f"""
+
+User:
+{chat_item.user_message}
+
+AI:
+{chat_item.ai_response}
+
+"""
 
     try:
 
@@ -277,25 +340,27 @@ def chat():
                     "content": f"""
 You are an advanced AI DevOps assistant.
 
-The current user is:
+Current user:
 {current_user.username}
 
-Help with:
+You remember previous conversations.
+
+Previous memory:
+{memory_context}
+
+Help professionally with:
 - Linux
 - AWS
 - Docker
 - Networking
 - Security
 - DevOps
-- Resume generation
-- Interview preparation
-
-Be professional and helpful.
 """
                 },
 
                 {
                     "role": "user",
+
                     "content": user_message
                 }
             ]
@@ -308,86 +373,113 @@ Be professional and helpful.
             .content
         )
 
+        new_chat = ChatHistory(
+
+            user_id=current_user.id,
+
+            user_message=user_message,
+
+            ai_response=ai_response
+        )
+
+        db.session.add(new_chat)
+
+        db.session.commit()
+
         return jsonify({
+
             "response": ai_response
         })
 
     except Exception as e:
 
         return jsonify({
+
             "response": str(e)
         })
 
 
 # =========================
-# INTERVIEW EVALUATION
+# WHISPER TRANSCRIPTION
 # =========================
 
-@app.route("/evaluate-interview", methods=["POST"])
+@app.route("/transcribe", methods=["POST"])
 @login_required
-def evaluate_interview():
-
-    data = request.json
-
-    question = data["question"]
-
-    answer = data["answer"]
+def transcribe():
 
     try:
 
-        response = client.chat.completions.create(
+        audio_file = request.files["audio"]
 
-            model="gpt-3.5-turbo",
+        with open(
+            "temp_audio.webm",
+            "wb"
+        ) as f:
 
-            messages=[
+            f.write(audio_file.read())
 
-                {
-                    "role": "system",
+        with open(
+            "temp_audio.webm",
+            "rb"
+        ) as audio:
 
-                    "content": """
-You are a professional technical interviewer.
+            transcript = client.audio.transcriptions.create(
 
-Evaluate the answer professionally.
+                model="whisper-1",
 
-Give:
-- strengths
-- weaknesses
-- short improvement advice
-
-Keep it concise.
-"""
-                },
-
-                {
-                    "role": "user",
-
-                    "content": f"""
-Question:
-{question}
-
-Answer:
-{answer}
-"""
-                }
-            ]
-        )
-
-        feedback = (
-            response
-            .choices[0]
-            .message
-            .content
-        )
+                file=audio
+            )
 
         return jsonify({
-            "feedback": feedback
+
+            "text": transcript.text
         })
 
     except Exception as e:
 
         return jsonify({
-            "feedback": str(e)
+
+            "text": str(e)
         })
+
+
+# =========================
+# PDF CV GENERATOR
+# =========================
+
+@app.route("/generate-cv-pdf", methods=["POST"])
+@login_required
+def generate_cv_pdf():
+
+    data = request.json
+
+    cv_text = data["cv_text"]
+
+    pdf_file = "generated_cv.pdf"
+
+    doc = SimpleDocTemplate(pdf_file)
+
+    styles = getSampleStyleSheet()
+
+    elements = []
+
+    elements.append(
+        Paragraph(
+            cv_text.replace("\n", "<br/>"),
+            styles["BodyText"]
+        )
+    )
+
+    elements.append(
+        Spacer(1, 12)
+    )
+
+    doc.build(elements)
+
+    return send_file(
+        pdf_file,
+        as_attachment=True
+    )
 
 
 # =========================
