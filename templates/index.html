@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>DevOps AI Platform</title>
+
+    <link rel="stylesheet"
+    href="/static/style.css">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div>
+
+            <h2 class="logo">
+                DevOps AI
+            </h2>
+
+            <button onclick="setPrompt('Linux assistant')">
+                Linux
+            </button>
+
+            <button onclick="setPrompt('AWS assistant')">
+                AWS
+            </button>
+
+            <button onclick="setPrompt('Docker assistant')">
+                Docker
+            </button>
+
+            <button onclick="setPrompt('Networking assistant')">
+                Networking
+            </button>
+
+            <button onclick="setPrompt('Security assistant')">
+                Security
+            </button>
+
+            <button onclick="setPrompt('Bash script generator')">
+                Scripts
+            </button>
+
+            <button onclick="showCVBuilder()">
+                AI Resume Builder
+            </button>
+
+            <button onclick="showInterview()">
+                AI Interview
+            </button>
+
+            <button onclick="showQuiz()">
+                Skill Assessment
+            </button>
+
+        </div>
+
+        <div class="sidebar-tools">
+
+            <h3>Quick Tools</h3>
+
+            <button onclick="quickAsk('Install nginx on Ubuntu')">
+                Install Nginx
+            </button>
+
+            <button onclick="quickAsk('Create Docker container for nginx')">
+                Docker Setup
+            </button>
+
+            <button onclick="quickAsk('Show Linux disk usage commands')">
+                Disk Usage
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MAIN -->
+
+    <div class="main-content">
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    DevOps AI Platform
+                </h1>
+
+                <p>
+                    AI-powered Linux, AWS & DevOps platform
+                </p>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="welcome-box">
+
+                    👋 Welcome,
+                    <strong>{{ username }}</strong>
+
+                </div>
+
+                <a href="/logout"
+                class="logout-btn">
+
+                    Logout
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TOOLS -->
+
+        <div class="tools-row">
+
+            <div class="tool-card">
+
+                <h3>Error Analyzer</h3>
+
+                <textarea
+                id="error-input"
+                placeholder="Paste Linux, Docker, AWS or Nginx errors here..."></textarea>
+
+                <button onclick="analyzeError()">
+                    Analyze Error
+                </button>
+
+            </div>
+
+            <div class="tool-card">
+
+                <h3>Upload Log File</h3>
+
+                <input type="file" id="log-file">
+
+                <br><br>
+
+                <button onclick="uploadLog()">
+                    Analyze Logs
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CV BUILDER -->
+
+        <div id="cv-builder"
+        class="tool-card"
+        style="display:none; margin:20px;">
+
+            <h2>AI Resume Builder</h2>
+
+            <br>
+
+            <input
+            type="text"
+            id="cv-name"
+            placeholder="Full Name">
+
+            <br><br>
+
+            <textarea
+            id="cv-skills"
+            placeholder="Skills"></textarea>
+
+            <br>
+
+            <textarea
+            id="cv-experience"
+            placeholder="Work Experience"></textarea>
+
+            <br>
+
+            <textarea
+            id="cv-education"
+            placeholder="Education"></textarea>
+
+            <br>
+
+            <button onclick="generateCV()">
+                Generate Professional CV
+            </button>
+
+        </div>
+
+
+
+        <!-- CHAT -->
+
+        <div id="chat-box">
+
+            <div class="message ai">
+
+                <strong>
+
+                    👋 Hello {{ username }}
+
+                </strong>
+
+                <br><br>
+
+                Welcome to your personal DevOps AI platform.
+
+                <br><br>
+
+                I can help you with:
+
+                <ul>
+
+                    <li>Linux troubleshooting</li>
+
+                    <li>AWS infrastructure</li>
+
+                    <li>Docker & containers</li>
+
+                    <li>Nginx & web servers</li>
+
+                    <li>Security & networking</li>
+
+                    <li>Bash scripts</li>
+
+                    <li>AI resume generation</li>
+
+                    <li>Mock interviews</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- INPUT -->
+
+        <div class="input-area">
+
+            <input
+            type="text"
+            id="user-input"
+            placeholder="Ask anything about Linux, AWS, Docker...">
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
+        </div>
+
+
+
+        <!-- QUIZ MODAL -->
+
+        <div id="quiz-modal" class="modal">
+
+            <div class="modal-content">
+
+                <span class="close-btn"
+                onclick="closeQuiz()">
+                    &times;
+                </span>
+
+                <h2>DevOps Skill Assessment</h2>
+
+                <br>
+
+                <div id="quiz-question"></div>
+
+                <div id="quiz-options"></div>
+
+                <br>
+
+                <button onclick="nextQuestion()">
+                    Next Question
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- INTERVIEW MODAL -->
+
+        <div id="interview-modal" class="modal">
+
+            <div class="modal-content">
+
+                <span class="close-btn"
+                onclick="closeInterview()">
+                    &times;
+                </span>
+
+                <h2>AI Interview Simulator</h2>
+
+                <br>
+
+                <select id="job-role">
+
+                    <option>
+                        DevOps Engineer
+                    </option>
+
+                    <option>
+                        Linux Administrator
+                    </option>
+
+                    <option>
+                        AWS Cloud Engineer
+                    </option>
+
+                    <option>
+                        Helpdesk Technician
+                    </option>
+
+                    <option>
+                        Security Analyst
+                    </option>
+
+                </select>
+
+                <br><br>
+
+                <button onclick="startInterview()">
+                    Start Interview
+                </button>
+
+                <br><br>
+
+                <div id="interview-content"></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+
+            <div class="footer-left">
+
+                <h3>DevOps AI Platform</h3>
+
+                <p>
+                    AI-powered DevOps assistant for Linux,
+                    AWS, Docker and cloud troubleshooting.
+                </p>
+
+            </div>
+
+            <div class="footer-center">
+
+                <h4>Contact</h4>
+
+                <p>Mahmoud Alghusain</p>
+
+                <p>
+
+                    <a href="mailto:m.j.alghusain@gmail.com">
+
+                        m.j.alghusain@gmail.com
+
+                    </a>
+
+                </p>
+
+            </div>
+
+            <div class="footer-right">
+
+                <h4>Version</h4>
+
+                <p>Version 1.0</p>
+
+                <p>Powered by OpenAI & AWS</p>
+
+            </div>
+
+        </footer>
+
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<script src="/static/script.js"></script>
+
+</body>
+</html>
