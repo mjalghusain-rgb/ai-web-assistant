@@ -184,6 +184,41 @@ def home():
 
 
 # =========================
+# ADMIN DASHBOARD
+# =========================
+
+@app.route("/admin")
+@login_required
+def admin_dashboard():
+
+    if not current_user.is_admin:
+
+        return "Access denied"
+
+    total_users = User.query.count()
+
+    total_chats = ChatHistory.query.count()
+
+    latest_users = (
+        User.query
+        .order_by(User.id.desc())
+        .limit(5)
+        .all()
+    )
+
+    return render_template(
+
+        "admin.html",
+
+        total_users=total_users,
+
+        total_chats=total_chats,
+
+        latest_users=latest_users
+    )
+
+
+# =========================
 # REGISTER
 # =========================
 
@@ -464,6 +499,7 @@ def generate_cv_pdf():
     elements = []
 
     elements.append(
+
         Paragraph(
             cv_text.replace("\n", "<br/>"),
             styles["BodyText"]

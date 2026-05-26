@@ -117,6 +117,20 @@
 
                 </div>
 
+
+                {% if current_user.is_admin %}
+
+                <a href="/admin"
+                class="logout-btn"
+                style="margin-right:10px;">
+
+                    👑 Admin Panel
+
+                </a>
+
+                {% endif %}
+
+
                 <a href="/logout"
                 class="logout-btn">
 
@@ -167,6 +181,10 @@
                     <li>CV Builder</li>
 
                     <li>Linux & AWS Assistant</li>
+
+                    <li>AI Memory</li>
+
+                    <li>Admin Dashboard</li>
 
                 </ul>
 
@@ -251,6 +269,10 @@
 
                     <li>Linux & AWS Assistant</li>
 
+                    <li>AI Memory 🧠</li>
+
+                    <li>Admin Dashboard 👑</li>
+
                 </ul>
 
             </div>
@@ -313,7 +335,7 @@
 
                 <h4>Version</h4>
 
-                <p>Version 3.0</p>
+                <p>Version 4.0</p>
 
                 <p>Powered by OpenAI & AWS</p>
 
