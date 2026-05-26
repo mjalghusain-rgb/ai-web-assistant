@@ -8,7 +8,9 @@
     <meta name="viewport"
     content="width=device-width, initial-scale=1.0">
 
-    <title>DevOps AI Platform</title>
+    <title>
+        DevOps AI Platform
+    </title>
 
     <link rel="stylesheet"
     href="/static/style.css">
@@ -20,66 +22,266 @@
 
 <body>
 
+
+
+<!-- =========================================
+     TOP NAVBAR
+========================================= -->
+
+<div class="top-navbar">
+
+    <div class="nav-left">
+
+        <h2>
+
+            🚀 DevOps AI
+
+        </h2>
+
+    </div>
+
+
+
+    <div class="nav-center">
+
+        <a href="#">
+
+            🏠 Home
+
+        </a>
+
+        <a href="#">
+
+            🤖 AI Chat
+
+        </a>
+
+        <a href="#">
+
+            📄 Resume
+
+        </a>
+
+        <a href="#">
+
+            🎤 Interview
+
+        </a>
+
+        <a href="#">
+
+            🧠 Quiz
+
+        </a>
+
+        <a href="#">
+
+            📁 Documents
+
+        </a>
+
+    </div>
+
+
+
+    <div class="nav-right">
+
+        <button class="voice-toggle"
+        onclick="toggleVoice()">
+
+            🔊 Voice ON
+
+        </button>
+
+
+
+        <button class="notification-btn">
+
+            🔔
+
+        </button>
+
+
+
+        {% if current_user.is_admin %}
+
+        <a href="/admin"
+        class="admin-btn">
+
+            👑 Admin
+
+        </a>
+
+        {% endif %}
+
+
+
+        <div class="profile-dropdown">
+
+            <button class="profile-btn">
+
+                👤 {{ username }}
+
+            </button>
+
+
+
+            <div class="dropdown-content">
+
+                <a href="#">
+
+                    👤 My Profile
+
+                </a>
+
+                <a href="#">
+
+                    💾 Saved Chats
+
+                </a>
+
+                <a href="#">
+
+                    📄 My CVs
+
+                </a>
+
+                <a href="#">
+
+                    ⚙ Settings
+
+                </a>
+
+                <a href="/logout">
+
+                    🚪 Logout
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
 <div class="app-container">
 
-    <!-- SIDEBAR -->
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
 
     <div class="sidebar">
 
         <div>
 
             <h2 class="logo">
-                DevOps AI
+
+                AI Systems
+
             </h2>
 
-            <button onclick="setPrompt('Linux assistant')">
-                Linux
+
+
+            <button onclick="setPrompt('Help me with Linux troubleshooting')">
+
+                Linux Assistant
+
             </button>
 
-            <button onclick="setPrompt('AWS assistant')">
-                AWS
+
+
+            <button onclick="setPrompt('Help me with AWS cloud architecture')">
+
+                AWS Assistant
+
             </button>
 
-            <button onclick="setPrompt('Docker assistant')">
-                Docker
+
+
+            <button onclick="setPrompt('Help me with Docker containers')">
+
+                Docker Assistant
+
             </button>
 
-            <button onclick="setPrompt('Networking assistant')">
+
+
+            <button onclick="setPrompt('Help me with Kubernetes')">
+
+                Kubernetes
+
+            </button>
+
+
+
+            <button onclick="setPrompt('Help me with Networking')">
+
                 Networking
+
             </button>
 
-            <button onclick="setPrompt('Security assistant')">
+
+
+            <button onclick="setPrompt('Help me with Cyber Security')">
+
                 Security
+
             </button>
+
+
 
             <button onclick="showCVBuilder()">
+
                 AI Resume Builder
+
             </button>
+
+
 
             <button onclick="showInterview()">
+
                 AI Interview
+
             </button>
+
+
 
             <button onclick="showQuiz()">
+
                 Skill Assessment
+
             </button>
 
-        </div>
 
-        <div class="sidebar-tools">
 
-            <h3>Quick Tools</h3>
+            <button onclick="showDocuments()">
 
-            <button onclick="quickAsk('Install nginx on Ubuntu')">
-                Install Nginx
+                Document Assistant
+
             </button>
 
-            <button onclick="quickAsk('Create Docker container for nginx')">
-                Docker Setup
+
+
+            <button onclick="showCodingAssistant()">
+
+                Coding Assistant
+
             </button>
 
-            <button onclick="quickAsk('Show Linux disk usage commands')">
-                Disk Usage
+
+
+            <button onclick="showLanguageTools()">
+
+                Language Tools
+
             </button>
 
         </div>
@@ -88,72 +290,36 @@
 
 
 
-    <!-- MAIN -->
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
 
     <div class="main-content">
 
-        <!-- TOPBAR -->
-
-        <div class="topbar">
-
-            <div>
-
-                <h1>
-                    DevOps AI Platform
-                </h1>
-
-                <p>
-                    AI-powered Linux, AWS & DevOps platform
-                </p>
-
-            </div>
-
-            <div class="topbar-right">
-
-                <div class="welcome-box">
-
-                    👋 Welcome,
-                    <strong>{{ username }}</strong>
-
-                </div>
 
 
-                {% if current_user.is_admin %}
-
-                <a href="/admin"
-                class="logout-btn"
-                style="margin-right:10px;">
-
-                    👑 Admin Panel
-
-                </a>
-
-                {% endif %}
-
-
-                <a href="/logout"
-                class="logout-btn">
-
-                    Logout
-
-                </a>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- TOOL CARDS -->
+        <!-- =========================================
+             DASHBOARD CARDS
+        ========================================== -->
 
         <div class="tools-row">
 
+
+
             <div class="tool-card">
 
-                <h3>Whisper AI Voice Assistant</h3>
+                <h3>
+
+                    🎤 Whisper Voice AI
+
+                </h3>
 
                 <p>
-                    Speak naturally using OpenAI Whisper.
+
+                    Speak naturally with AI.
+
                 </p>
 
                 <br>
@@ -166,25 +332,71 @@
 
             </div>
 
+
+
+
+
             <div class="tool-card">
 
-                <h3>AI Features</h3>
+                <h3>
+
+                    🧠 AI Memory
+
+                </h3>
+
+                <p>
+
+                    AI remembers your conversations
+                    and adapts to your workflow.
+
+                </p>
+
+            </div>
+
+
+
+
+
+            <div class="tool-card">
+
+                <h3>
+
+                    📄 Resume Builder
+
+                </h3>
+
+                <p>
+
+                    Generate ATS-friendly CVs
+                    and export PDFs instantly.
+
+                </p>
+
+            </div>
+
+
+
+
+
+            <div class="tool-card">
+
+                <h3>
+
+                    🤖 AI Modules
+
+                </h3>
 
                 <ul>
 
-                    <li>Voice AI</li>
+                    <li>Document AI</li>
 
-                    <li>Interview Simulator</li>
+                    <li>Coding Assistant</li>
 
-                    <li>Skill Assessment</li>
+                    <li>Language Tools</li>
 
-                    <li>CV Builder</li>
+                    <li>AI Interviews</li>
 
-                    <li>Linux & AWS Assistant</li>
-
-                    <li>AI Memory</li>
-
-                    <li>Admin Dashboard</li>
+                    <li>Skill Assessments</li>
 
                 </ul>
 
@@ -194,50 +406,11 @@
 
 
 
-        <!-- CV BUILDER -->
-
-        <div id="cv-builder"
-        class="tool-card"
-        style="display:none; margin:20px;">
-
-            <h2>AI Resume Builder</h2>
-
-            <br>
-
-            <input
-            type="text"
-            id="cv-name"
-            placeholder="Full Name">
-
-            <br><br>
-
-            <textarea
-            id="cv-skills"
-            placeholder="Skills"></textarea>
-
-            <br>
-
-            <textarea
-            id="cv-experience"
-            placeholder="Work Experience"></textarea>
-
-            <br>
-
-            <textarea
-            id="cv-education"
-            placeholder="Education"></textarea>
-
-            <br>
-
-            <button onclick="generateCV()">
-                Generate Professional CV
-            </button>
-
-        </div>
 
 
-
-        <!-- CHAT -->
+        <!-- =========================================
+             CHAT BOX
+        ========================================== -->
 
         <div id="chat-box">
 
@@ -245,33 +418,44 @@
 
                 <strong>
 
-                    👋 Hello {{ username }}
+                    🚀 DevOps AI
 
                 </strong>
 
                 <br><br>
 
-                Welcome to your advanced DevOps AI platform.
+                Welcome back
+                <strong>
+
+                    {{ username }}
+
+                </strong>
+
+                👋
 
                 <br><br>
 
-                Features enabled:
+                Your AI workspace is ready.
+
+                <br><br>
+
+                Enabled systems:
 
                 <ul>
 
-                    <li>Whisper Voice AI 🎤</li>
+                    <li>Whisper AI</li>
 
-                    <li>AI Interview System</li>
+                    <li>AI Memory</li>
 
-                    <li>Skill Assessments</li>
+                    <li>Resume Builder</li>
 
-                    <li>AI Resume Builder</li>
+                    <li>Interview AI</li>
 
-                    <li>Linux & AWS Assistant</li>
+                    <li>Document Assistant</li>
 
-                    <li>AI Memory 🧠</li>
+                    <li>Coding Assistant</li>
 
-                    <li>Admin Dashboard 👑</li>
+                    <li>Language Tools</li>
 
                 </ul>
 
@@ -281,43 +465,70 @@
 
 
 
-        <!-- INPUT -->
+
+
+        <!-- =========================================
+             INPUT AREA
+        ========================================== -->
 
         <div class="input-area">
 
             <input
             type="text"
             id="user-input"
-            placeholder="Ask anything about Linux, AWS, Docker...">
+            placeholder="Ask anything about Linux, AWS, Docker, Networking...">
+
+
 
             <button onclick="sendMessage()">
+
                 Send
+
             </button>
 
         </div>
 
 
 
-        <!-- FOOTER -->
+
+
+        <!-- =========================================
+             FOOTER
+        ========================================== -->
 
         <footer class="footer">
 
-            <div class="footer-left">
+            <div>
 
-                <h3>DevOps AI Platform</h3>
+                <h3>
+
+                    🚀 DevOps AI Platform
+
+                </h3>
 
                 <p>
-                    AI-powered DevOps assistant
-                    with OpenAI Whisper + GPT.
+
+                    Professional AI-powered DevOps workspace.
+
                 </p>
 
             </div>
 
-            <div class="footer-center">
 
-                <h4>Contact</h4>
 
-                <p>Mahmoud Alghusain</p>
+            <div>
+
+                <h4>
+
+                    📧 Contact
+
+                </h4>
+
+                <p>
+
+                    Mahmoud Alghusain
+
+                </p>
 
                 <p>
 
@@ -331,13 +542,27 @@
 
             </div>
 
-            <div class="footer-right">
 
-                <h4>Version</h4>
 
-                <p>Version 4.0</p>
+            <div>
 
-                <p>Powered by OpenAI & AWS</p>
+                <h4>
+
+                    ⚡ Platform
+
+                </h4>
+
+                <p>
+
+                    Version 2.1
+
+                </p>
+
+                <p>
+
+                    Powered by OpenAI & AWS
+
+                </p>
 
             </div>
 
@@ -346,6 +571,8 @@
     </div>
 
 </div>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
 

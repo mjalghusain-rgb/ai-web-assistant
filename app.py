@@ -39,29 +39,36 @@ import os
 import re
 
 
-# =========================
+
+# ==================================================
 # LOAD ENV
-# =========================
+# ==================================================
 
 load_dotenv()
 
 
-# =========================
+
+# ==================================================
 # FLASK CONFIG
-# =========================
+# ==================================================
 
 app = Flask(__name__)
 
-app.secret_key = "supersecretkey"
+app.secret_key = "supersecretkey_v2"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "sqlite:///users.db"
+)
+
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
 
-# =========================
+
+# ==================================================
 # LOGIN MANAGER
-# =========================
+# ==================================================
 
 login_manager = LoginManager()
 
@@ -70,18 +77,20 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
-# =========================
-# OPENAI
-# =========================
+
+# ==================================================
+# OPENAI CLIENT
+# ==================================================
 
 client = openai.OpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
 
-# =========================
+
+# ==================================================
 # USER MODEL
-# =========================
+# ==================================================
 
 class User(UserMixin, db.Model):
 
@@ -103,7 +112,7 @@ class User(UserMixin, db.Model):
     )
 
     password = db.Column(
-        db.String(200),
+        db.String(255),
         nullable=False
     )
 
@@ -113,9 +122,10 @@ class User(UserMixin, db.Model):
     )
 
 
-# =========================
-# CHAT MEMORY MODEL
-# =========================
+
+# ==================================================
+# CHAT HISTORY MODEL
+# ==================================================
 
 class ChatHistory(db.Model):
 
@@ -140,6 +150,11 @@ class ChatHistory(db.Model):
     )
 
 
+
+# ==================================================
+# LOGIN LOADER
+# ==================================================
+
 @login_manager.user_loader
 def load_user(user_id):
 
@@ -148,9 +163,10 @@ def load_user(user_id):
     )
 
 
-# =========================
+
+# ==================================================
 # PASSWORD VALIDATION
-# =========================
+# ==================================================
 
 def validate_password(password):
 
@@ -169,9 +185,10 @@ def validate_password(password):
     return True
 
 
-# =========================
-# HOME
-# =========================
+
+# ==================================================
+# HOME PAGE
+# ==================================================
 
 @app.route("/")
 @login_required
@@ -183,9 +200,10 @@ def home():
     )
 
 
-# =========================
+
+# ==================================================
 # ADMIN DASHBOARD
-# =========================
+# ==================================================
 
 @app.route("/admin")
 @login_required
@@ -218,9 +236,10 @@ def admin_dashboard():
     )
 
 
-# =========================
+
+# ==================================================
 # REGISTER
-# =========================
+# ==================================================
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -232,6 +251,7 @@ def register():
         email = request.form["email"]
 
         password = request.form["password"]
+
 
         if not validate_password(password):
 
@@ -245,9 +265,11 @@ Password must:
 
             return redirect("/register")
 
+
         existing_user = User.query.filter_by(
             email=email
         ).first()
+
 
         if existing_user:
 
@@ -255,35 +277,50 @@ Password must:
 
             return redirect("/register")
 
+
         hashed_password = generate_password_hash(
             password
         )
 
-        is_first_user = User.query.count() == 0
+
+        is_first_user = (
+            User.query.count() == 0
+        )
+
 
         user = User(
+
             username=username,
+
             email=email,
+
             password=hashed_password,
+
             is_admin=is_first_user
         )
+
 
         db.session.add(user)
 
         db.session.commit()
 
-        flash("Account created successfully.")
+
+        flash(
+            "Account created successfully."
+        )
 
         return redirect("/login")
+
 
     return render_template(
         "register.html"
     )
 
 
-# =========================
+
+# ==================================================
 # LOGIN
-# =========================
+# ==================================================
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -294,9 +331,11 @@ def login():
 
         password = request.form["password"]
 
+
         user = User.query.filter_by(
             email=email
         ).first()
+
 
         if user and check_password_hash(
             user.password,
@@ -307,16 +346,21 @@ def login():
 
             return redirect("/")
 
-        flash("Invalid email or password.")
+
+        flash(
+            "Invalid email or password."
+        )
+
 
     return render_template(
         "login.html"
     )
 
 
-# =========================
+
+# ==================================================
 # LOGOUT
-# =========================
+# ==================================================
 
 @app.route("/logout")
 @login_required
@@ -327,9 +371,10 @@ def logout():
     return redirect("/login")
 
 
-# =========================
-# CHAT API + MEMORY
-# =========================
+
+# ==================================================
+# CHAT API
+# ==================================================
 
 @app.route("/chat", methods=["POST"])
 @login_required
@@ -339,6 +384,7 @@ def chat():
 
     user_message = data["message"]
 
+
     previous_chats = (
         ChatHistory.query
         .filter_by(user_id=current_user.id)
@@ -347,7 +393,9 @@ def chat():
         .all()
     )
 
+
     memory_context = ""
+
 
     for chat_item in reversed(previous_chats):
 
@@ -361,18 +409,20 @@ AI:
 
 """
 
+
     try:
 
-        response = client.chat.completions.create(
+        response = (
+            client.chat.completions.create(
 
-            model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo",
 
-            messages=[
+                messages=[
 
-                {
-                    "role": "system",
+                    {
+                        "role": "system",
 
-                    "content": f"""
+                        "content": f"""
 You are an advanced AI DevOps assistant.
 
 Current user:
@@ -391,15 +441,17 @@ Help professionally with:
 - Security
 - DevOps
 """
-                },
+                    },
 
-                {
-                    "role": "user",
+                    {
+                        "role": "user",
 
-                    "content": user_message
-                }
-            ]
+                        "content": user_message
+                    }
+                ]
+            )
         )
+
 
         ai_response = (
             response
@@ -407,6 +459,7 @@ Help professionally with:
             .message
             .content
         )
+
 
         new_chat = ChatHistory(
 
@@ -417,14 +470,17 @@ Help professionally with:
             ai_response=ai_response
         )
 
+
         db.session.add(new_chat)
 
         db.session.commit()
+
 
         return jsonify({
 
             "response": ai_response
         })
+
 
     except Exception as e:
 
@@ -434,9 +490,10 @@ Help professionally with:
         })
 
 
-# =========================
+
+# ==================================================
 # WHISPER TRANSCRIPTION
-# =========================
+# ==================================================
 
 @app.route("/transcribe", methods=["POST"])
 @login_required
@@ -446,29 +503,37 @@ def transcribe():
 
         audio_file = request.files["audio"]
 
+
         with open(
             "temp_audio.webm",
             "wb"
         ) as f:
 
-            f.write(audio_file.read())
+            f.write(
+                audio_file.read()
+            )
+
 
         with open(
             "temp_audio.webm",
             "rb"
         ) as audio:
 
-            transcript = client.audio.transcriptions.create(
+            transcript = (
+                client.audio.transcriptions.create(
 
-                model="whisper-1",
+                    model="whisper-1",
 
-                file=audio
+                    file=audio
+                )
             )
+
 
         return jsonify({
 
             "text": transcript.text
         })
+
 
     except Exception as e:
 
@@ -478,11 +543,15 @@ def transcribe():
         })
 
 
-# =========================
-# PDF CV GENERATOR
-# =========================
 
-@app.route("/generate-cv-pdf", methods=["POST"])
+# ==================================================
+# PDF CV GENERATOR
+# ==================================================
+
+@app.route(
+    "/generate-cv-pdf",
+    methods=["POST"]
+)
 @login_required
 def generate_cv_pdf():
 
@@ -490,37 +559,53 @@ def generate_cv_pdf():
 
     cv_text = data["cv_text"]
 
+
     pdf_file = "generated_cv.pdf"
 
-    doc = SimpleDocTemplate(pdf_file)
+
+    doc = SimpleDocTemplate(
+        pdf_file
+    )
 
     styles = getSampleStyleSheet()
 
     elements = []
 
+
     elements.append(
 
         Paragraph(
-            cv_text.replace("\n", "<br/>"),
+
+            cv_text.replace(
+                "\n",
+                "<br/>"
+            ),
+
             styles["BodyText"]
         )
     )
+
 
     elements.append(
         Spacer(1, 12)
     )
 
+
     doc.build(elements)
 
+
     return send_file(
+
         pdf_file,
+
         as_attachment=True
     )
 
 
-# =========================
+
+# ==================================================
 # START APP
-# =========================
+# ==================================================
 
 if __name__ == "__main__":
 
@@ -528,7 +613,10 @@ if __name__ == "__main__":
 
         db.create_all()
 
+
     app.run(
+
         host="0.0.0.0",
+
         port=5000
     )
