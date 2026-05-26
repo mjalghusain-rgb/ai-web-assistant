@@ -1,12 +1,32 @@
 const input =
-document.getElementById("user-input");
+document.getElementById(
+    "user-input"
+);
 
 const chatBox =
-document.getElementById("chat-box");
+document.getElementById(
+    "chat-box"
+);
 
 const recordBtn =
-document.getElementById("record-btn");
+document.getElementById(
+    "record-btn"
+);
 
+const documentInput =
+document.getElementById(
+    "document-input"
+);
+
+
+
+/* =========================================
+   GLOBALS
+========================================= */
+
+let currentMode = "general";
+
+let voiceEnabled = true;
 
 let mediaRecorder;
 
@@ -14,9 +34,9 @@ let audioChunks = [];
 
 
 
-/* ==================================================
-   ENTER KEY SEND
-================================================== */
+/* =========================================
+   ENTER SEND
+========================================= */
 
 input.addEventListener(
     "keypress",
@@ -31,9 +51,64 @@ input.addEventListener(
 
 
 
-/* ==================================================
+/* =========================================
+   SET AI MODE
+========================================= */
+
+function setMode(mode){
+
+    currentMode = mode;
+
+    addMessage(
+
+        "ai",
+
+        `⚡ AI mode switched to:
+        <strong>${mode}</strong>`
+    );
+}
+
+
+
+/* =========================================
+   VOICE TOGGLE
+========================================= */
+
+function toggleVoice(){
+
+    voiceEnabled = !voiceEnabled;
+
+    const button =
+    document.querySelector(
+        ".voice-toggle"
+    );
+
+
+    if(voiceEnabled){
+
+        button.innerHTML =
+        "🔊 Voice ON";
+
+        button.style.background =
+        "#22c55e";
+
+    }else{
+
+        window.speechSynthesis.cancel();
+
+        button.innerHTML =
+        "🔇 Voice OFF";
+
+        button.style.background =
+        "#ef4444";
+    }
+}
+
+
+
+/* =========================================
    ADD MESSAGE
-================================================== */
+========================================= */
 
 function addMessage(
     sender,
@@ -76,9 +151,9 @@ function addMessage(
 
 
 
-/* ==================================================
-   LOADING MESSAGE
-================================================== */
+/* =========================================
+   LOADING
+========================================= */
 
 function showLoading(){
 
@@ -100,11 +175,8 @@ function showLoading(){
 
         <br><br>
 
-        <div class="typing">
+        Thinking...
 
-            Thinking...
-
-        </div>
     `;
 
     chatBox.appendChild(div);
@@ -129,9 +201,9 @@ function removeLoading(){
 
 
 
-/* ==================================================
+/* =========================================
    SEND MESSAGE
-================================================== */
+========================================= */
 
 async function sendMessage(){
 
@@ -170,7 +242,9 @@ async function sendMessage(){
 
                 body:JSON.stringify({
 
-                    message:userMessage
+                    message:userMessage,
+
+                    mode:currentMode
                 })
             }
         );
@@ -182,22 +256,13 @@ async function sendMessage(){
         removeLoading();
 
 
-        const aiHtml =
-        `
+        const aiHtml = `
 
         <div class="markdown-body">
 
             ${marked.parse(data.response)}
 
         </div>
-
-        <br>
-
-        <button onclick="downloadCVPDF()">
-
-            📄 Download PDF
-
-        </button>
 
         `;
 
@@ -208,9 +273,12 @@ async function sendMessage(){
         );
 
 
-        speakText(
-            data.response
-        );
+        if(voiceEnabled){
+
+            speakText(
+                data.response
+            );
+        }
 
 
         highlightCode();
@@ -221,19 +289,26 @@ async function sendMessage(){
         removeLoading();
 
         addMessage(
+
             "ai",
-            "⚠️ Error communicating with server."
+
+            "⚠️ Server connection failed."
         );
     }
 }
 
 
 
-/* ==================================================
-   SPEAK AI RESPONSE
-================================================== */
+/* =========================================
+   SPEAK TEXT
+========================================= */
 
 function speakText(text){
+
+    if(!voiceEnabled){
+
+        return;
+    }
 
     const speech =
     new SpeechSynthesisUtterance();
@@ -254,20 +329,22 @@ function speakText(text){
 
 
 
-/* ==================================================
+/* =========================================
    WHISPER RECORDING
-================================================== */
+========================================= */
 
 if(recordBtn){
 
     recordBtn.addEventListener(
+
         "click",
+
         async ()=>{
 
             if(
                 recordBtn.innerText
                 ===
-                "🎤 Start Recording"
+                "🎤"
             ){
 
                 try{
@@ -286,7 +363,6 @@ if(recordBtn){
                         stream
                     );
 
-
                     mediaRecorder.start();
 
                     audioChunks = [];
@@ -303,13 +379,13 @@ if(recordBtn){
 
 
                     recordBtn.innerText =
-                    "⏹ Stop Recording";
+                    "⏹";
 
 
                 }catch(error){
 
                     alert(
-                        "Microphone access denied."
+                        "Microphone denied."
                     );
                 }
 
@@ -322,7 +398,7 @@ if(recordBtn){
                 async ()=>{
 
                     recordBtn.innerText =
-                    "⌛ Processing";
+                    "⌛";
 
 
                     const audioBlob =
@@ -336,7 +412,6 @@ if(recordBtn){
 
                     const formData =
                     new FormData();
-
 
                     formData.append(
 
@@ -371,7 +446,7 @@ if(recordBtn){
 
 
                         recordBtn.innerText =
-                        "🎤 Start Recording";
+                        "🎤";
 
 
                         sendMessage();
@@ -380,11 +455,11 @@ if(recordBtn){
                     }catch(error){
 
                         alert(
-                            "Whisper transcription failed."
+                            "Voice transcription failed."
                         );
 
                         recordBtn.innerText =
-                        "🎤 Start Recording";
+                        "🎤";
                     }
                 };
             }
@@ -394,191 +469,211 @@ if(recordBtn){
 
 
 
-/* ==================================================
-   PDF DOWNLOAD
-================================================== */
+/* =========================================
+   DOCUMENT UPLOAD
+========================================= */
 
-async function downloadCVPDF(){
+async function uploadDocument(){
 
-    const messages =
-    document.querySelectorAll(
-        ".message.ai"
-    );
+    const file =
+    documentInput.files[0];
 
+    if(!file){
 
-    if(messages.length === 0){
+        alert(
+            "Select a document first."
+        );
 
         return;
     }
 
 
-    const latestMessage =
-    messages[
-        messages.length - 1
-    ];
+    const formData =
+    new FormData();
 
-
-    const cvText =
-    latestMessage.innerText;
+    formData.append(
+        "document",
+        file
+    );
 
 
     try{
 
         const response =
         await fetch(
-            "/generate-cv-pdf",
+            "/upload-document",
             {
 
                 method:"POST",
 
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body:JSON.stringify({
-
-                    cv_text:cvText
-                })
+                body:formData
             }
         );
 
 
-        const blob =
-        await response.blob();
+        const data =
+        await response.json();
 
 
-        const url =
-        window.URL
-        .createObjectURL(blob);
+        addMessage(
 
+            "ai",
 
-        const a =
-        document.createElement("a");
-
-
-        a.href = url;
-
-        a.download = "AI_CV.pdf";
-
-
-        document.body.appendChild(a);
-
-        a.click();
-
-        a.remove();
+            `📁 Document uploaded:
+            <strong>${data.filename}</strong>`
+        );
 
 
     }catch(error){
 
         alert(
-            "PDF generation failed."
+            "Upload failed."
         );
     }
 }
 
 
 
-/* ==================================================
+/* =========================================
    QUICK PROMPTS
-================================================== */
+========================================= */
 
-function setPrompt(text){
+function showResumePrompt(){
 
-    input.value = text;
+    input.value = `
+Create a professional ATS-friendly DevOps resume.
+`;
+
+    sendMessage();
+}
+
+
+
+function showRecommendations(){
+
+    input.value = `
+Recommend technologies and learning paths for DevOps.
+`;
+
+    sendMessage();
+}
+
+
+
+function showDockerHelp(){
+
+    setMode("coding");
+
+    input.value = `
+Help me create a professional Docker setup.
+`;
+
+    sendMessage();
+}
+
+
+
+function showTerraformHelp(){
+
+    setMode("coding");
+
+    input.value = `
+Generate Terraform infrastructure example.
+`;
+
+    sendMessage();
+}
+
+
+
+function showCodingPrompt(){
+
+    setMode("coding");
+
+    input.value = `
+Help me with programming and debugging.
+`;
+
+    sendMessage();
+}
+
+
+
+function showTranslationPrompt(){
+
+    setMode("language");
+
+    input.value = `
+Translate this text professionally:
+`;
 
     input.focus();
 }
 
 
 
-/* ==================================================
-   QUICK ASK
-================================================== */
+function showGrammarPrompt(){
 
-function quickAsk(text){
+    setMode("language");
 
-    input.value = text;
-
-    sendMessage();
-}
-
-
-
-/* ==================================================
-   SHOW CV BUILDER
-================================================== */
-
-function showCVBuilder(){
-
-    const prompt = `
-
-Create a professional ATS-friendly DevOps resume template with:
-
-- Summary
-- Skills
-- Experience
-- Certifications
-- Education
-- Projects
-
+    input.value = `
+Correct grammar for:
 `;
 
-    input.value = prompt;
-
-    sendMessage();
+    input.focus();
 }
 
 
 
-/* ==================================================
-   SHOW INTERVIEW
-================================================== */
+function showEmailPrompt(){
 
-function showInterview(){
+    setMode("language");
 
-    const prompt = `
-
-Start a professional DevOps interview simulation.
-
-Ask one question at a time.
-
+    input.value = `
+Write a professional email about:
 `;
 
-    input.value = prompt;
-
-    sendMessage();
+    input.focus();
 }
 
 
 
-/* ==================================================
-   SHOW QUIZ
-================================================== */
+function showCareerAdvice(){
 
-function showQuiz(){
-
-    const prompt = `
-
-Create a 10-question DevOps multiple-choice quiz.
-
-Show:
-- Question
-- 4 choices
-- Correct answer
-
+    input.value = `
+Give me professional IT career advice.
 `;
 
-    input.value = prompt;
+    sendMessage();
+}
+
+
+
+function showLearningPath(){
+
+    input.value = `
+Create a DevOps learning roadmap.
+`;
 
     sendMessage();
 }
 
 
 
-/* ==================================================
-   AUTO SCROLL
-================================================== */
+function showImagePrompt(){
+
+    input.value = `
+Generate a professional AI image for:
+`;
+
+    input.focus();
+}
+
+
+
+/* =========================================
+   SCROLL
+========================================= */
 
 function scrollToBottom(){
 
@@ -588,9 +683,9 @@ function scrollToBottom(){
 
 
 
-/* ==================================================
+/* =========================================
    HIGHLIGHT CODE
-================================================== */
+========================================= */
 
 function highlightCode(){
 

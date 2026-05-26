@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        User Profile
+
+    </title>
+
+    <link rel="stylesheet"
+    href="/static/style.css">
+
+</head>
+
+<body>
+
+
+
+<div class="top-navbar">
+
+    <div class="nav-left">
+
+        <h2>
+
+            🚀 DevOps AI
+
+        </h2>
+
+    </div>
+
+
+
+    <div class="nav-right">
+
+        <a href="/"
+        class="admin-btn">
+
+            ← Back
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+
+
+<div class="main-content">
+
+
+
+    <div class="tool-card"
+    style="max-width:800px; margin:auto;">
+
+
+
+        <div style="text-align:center;">
+
+            <img
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            width="120"
+            style="
+            border-radius:50%;
+            margin-bottom:20px;
+            ">
+
+            <h1>
+
+                {{ user.username }}
+
+            </h1>
+
+            <p>
+
+                {{ user.email }}
+
+            </p>
+
+        </div>
+
+
+
+        <br><br>
+
+
+
+        <form
+        action="/update-profile"
+        method="POST">
+
+
+
+            <label>
+
+                Job Title
+
+            </label>
+
+            <br><br>
+
+            <input
+            type="text"
+            name="job_title"
+            value="{{ user.job_title }}"
+            placeholder="DevOps Engineer">
+
+
+
+            <br><br>
+
+
+
+            <label>
+
+                Country
+
+            </label>
+
+            <br><br>
+
+            <input
+            type="text"
+            name="country"
+            value="{{ user.country }}"
+            placeholder="Sweden">
+
+
+
+            <br><br>
+
+
+
+            <label>
+
+                Experience Level
+
+            </label>
+
+            <br><br>
+
+            <input
+            type="text"
+            name="experience_level"
+            value="{{ user.experience_level }}"
+            placeholder="Junior / Mid / Senior">
+
+
+
+            <br><br>
+
+
+
+            <label>
+
+                Skills
+
+            </label>
+
+            <br><br>
+
+            <textarea
+            name="skills"
+            placeholder="Docker, AWS, Linux...">{{ user.skills }}</textarea>
+
+
+
+            <br><br>
+
+
+
+            <label>
+
+                Bio
+
+            </label>
+
+            <br><br>
+
+            <textarea
+            name="bio"
+            placeholder="Tell us about yourself...">{{ user.bio }}</textarea>
+
+
+
+            <br><br>
+
+
+
+            <button type="submit">
+
+                💾 Save Profile
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

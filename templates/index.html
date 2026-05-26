@@ -9,7 +9,9 @@
     content="width=device-width, initial-scale=1.0">
 
     <title>
-        DevOps AI Platform
+
+        DevOps AI Platform V3
+
     </title>
 
     <link rel="stylesheet"
@@ -46,37 +48,31 @@
 
         <a href="#">
 
-            🏠 Home
+            🏠 Dashboard
 
         </a>
 
-        <a href="#">
+        <a href="#chat-section">
 
             🤖 AI Chat
 
         </a>
 
-        <a href="#">
+        <a href="#tools-section">
 
-            📄 Resume
-
-        </a>
-
-        <a href="#">
-
-            🎤 Interview
+            ⚡ Tools
 
         </a>
 
-        <a href="#">
+        <a href="/profile">
 
-            🧠 Quiz
+            👤 Profile
 
         </a>
 
-        <a href="#">
+        <a href="/admin">
 
-            📁 Documents
+            👑 Admin
 
         </a>
 
@@ -95,27 +91,6 @@
 
 
 
-        <button class="notification-btn">
-
-            🔔
-
-        </button>
-
-
-
-        {% if current_user.is_admin %}
-
-        <a href="/admin"
-        class="admin-btn">
-
-            👑 Admin
-
-        </a>
-
-        {% endif %}
-
-
-
         <div class="profile-dropdown">
 
             <button class="profile-btn">
@@ -128,7 +103,7 @@
 
             <div class="dropdown-content">
 
-                <a href="#">
+                <a href="/profile">
 
                     👤 My Profile
 
@@ -142,13 +117,7 @@
 
                 <a href="#">
 
-                    📄 My CVs
-
-                </a>
-
-                <a href="#">
-
-                    ⚙ Settings
+                    📄 Saved CVs
 
                 </a>
 
@@ -180,111 +149,91 @@
 
     <div class="sidebar">
 
-        <div>
+        <h2 class="logo">
 
-            <h2 class="logo">
+            AI Systems
 
-                AI Systems
+        </h2>
 
-            </h2>
 
 
+        <button onclick="setMode('general')">
 
-            <button onclick="setPrompt('Help me with Linux troubleshooting')">
+            🤖 General AI
 
-                Linux Assistant
+        </button>
 
-            </button>
 
 
+        <button onclick="setMode('devops')">
 
-            <button onclick="setPrompt('Help me with AWS cloud architecture')">
+            ☁️ DevOps AI
 
-                AWS Assistant
+        </button>
 
-            </button>
 
 
+        <button onclick="setMode('coding')">
 
-            <button onclick="setPrompt('Help me with Docker containers')">
+            💻 Coding Assistant
 
-                Docker Assistant
+        </button>
 
-            </button>
 
 
+        <button onclick="setMode('language')">
 
-            <button onclick="setPrompt('Help me with Kubernetes')">
+            🌍 Language Tools
 
-                Kubernetes
+        </button>
 
-            </button>
 
 
+        <button onclick="setMode('interview')">
 
-            <button onclick="setPrompt('Help me with Networking')">
+            🎤 Interview AI
 
-                Networking
+        </button>
 
-            </button>
 
 
+        <button onclick="setMode('quiz')">
 
-            <button onclick="setPrompt('Help me with Cyber Security')">
+            🧠 Skill Assessment
 
-                Security
+        </button>
 
-            </button>
 
 
+        <button onclick="showResumePrompt()">
 
-            <button onclick="showCVBuilder()">
+            📄 Resume Builder
 
-                AI Resume Builder
+        </button>
 
-            </button>
 
 
+        <button onclick="showRecommendations()">
 
-            <button onclick="showInterview()">
+            🧠 AI Recommendations
 
-                AI Interview
+        </button>
 
-            </button>
 
 
+        <button onclick="showDockerHelp()">
 
-            <button onclick="showQuiz()">
+            🐳 Docker Assistant
 
-                Skill Assessment
+        </button>
 
-            </button>
 
 
+        <button onclick="showTerraformHelp()">
 
-            <button onclick="showDocuments()">
+            ⚙ Terraform AI
 
-                Document Assistant
-
-            </button>
-
-
-
-            <button onclick="showCodingAssistant()">
-
-                Coding Assistant
-
-            </button>
-
-
-
-            <button onclick="showLanguageTools()">
-
-                Language Tools
-
-            </button>
-
-        </div>
+        </button>
 
     </div>
 
@@ -304,104 +253,163 @@
              DASHBOARD CARDS
         ========================================== -->
 
-        <div class="tools-row">
+        <div class="dashboard-grid">
 
 
 
-            <div class="tool-card">
+            <div class="dashboard-card">
 
                 <h3>
 
-                    🎤 Whisper Voice AI
+                    🤖 AI Chat
 
                 </h3>
 
                 <p>
 
-                    Speak naturally with AI.
+                    Advanced AI workspace with memory.
 
                 </p>
 
-                <br>
+            </div>
 
-                <button id="record-btn">
 
-                    🎤 Start Recording
+
+            <div class="dashboard-card">
+
+                <h3>
+
+                    🎤 Whisper AI
+
+                </h3>
+
+                <p>
+
+                    Real-time speech recognition.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="dashboard-card">
+
+                <h3>
+
+                    📄 Document AI
+
+                </h3>
+
+                <p>
+
+                    Upload and analyze documents.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="dashboard-card">
+
+                <h3>
+
+                    🎨 AI Images
+
+                </h3>
+
+                <p>
+
+                    Generate logos and diagrams.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <!-- =========================================
+             TOOLS SECTION
+        ========================================== -->
+
+        <div id="tools-section"
+        class="tool-panel">
+
+
+
+            <h2>
+
+                ⚡ AI Productivity Tools
+
+            </h2>
+
+
+
+            <div class="tool-buttons">
+
+
+
+                <button onclick="showCodingPrompt()">
+
+                    💻 Coding Assistant
+
+                </button>
+
+
+
+                <button onclick="showTranslationPrompt()">
+
+                    🌍 Translator
+
+                </button>
+
+
+
+                <button onclick="showGrammarPrompt()">
+
+                    ✍ Grammar Fixer
+
+                </button>
+
+
+
+                <button onclick="showEmailPrompt()">
+
+                    📧 Email Generator
+
+                </button>
+
+
+
+                <button onclick="showCareerAdvice()">
+
+                    🚀 Career Advice
+
+                </button>
+
+
+
+                <button onclick="showLearningPath()">
+
+                    📚 Learning Path
+
+                </button>
+
+
+
+                <button onclick="showImagePrompt()">
+
+                    🎨 Image Generator
 
                 </button>
 
             </div>
 
-
-
-
-
-            <div class="tool-card">
-
-                <h3>
-
-                    🧠 AI Memory
-
-                </h3>
-
-                <p>
-
-                    AI remembers your conversations
-                    and adapts to your workflow.
-
-                </p>
-
-            </div>
-
-
-
-
-
-            <div class="tool-card">
-
-                <h3>
-
-                    📄 Resume Builder
-
-                </h3>
-
-                <p>
-
-                    Generate ATS-friendly CVs
-                    and export PDFs instantly.
-
-                </p>
-
-            </div>
-
-
-
-
-
-            <div class="tool-card">
-
-                <h3>
-
-                    🤖 AI Modules
-
-                </h3>
-
-                <ul>
-
-                    <li>Document AI</li>
-
-                    <li>Coding Assistant</li>
-
-                    <li>Language Tools</li>
-
-                    <li>AI Interviews</li>
-
-                    <li>Skill Assessments</li>
-
-                </ul>
-
-            </div>
-
         </div>
 
 
@@ -409,82 +417,122 @@
 
 
         <!-- =========================================
-             CHAT BOX
+             DOCUMENT UPLOAD
         ========================================== -->
 
-        <div id="chat-box">
+        <div class="upload-box">
 
-            <div class="message ai">
+            <h3>
 
-                <strong>
+                📁 Upload Document
 
-                    🚀 DevOps AI
+            </h3>
 
-                </strong>
-
-                <br><br>
-
-                Welcome back
-                <strong>
-
-                    {{ username }}
-
-                </strong>
-
-                👋
-
-                <br><br>
-
-                Your AI workspace is ready.
-
-                <br><br>
-
-                Enabled systems:
-
-                <ul>
-
-                    <li>Whisper AI</li>
-
-                    <li>AI Memory</li>
-
-                    <li>Resume Builder</li>
-
-                    <li>Interview AI</li>
-
-                    <li>Document Assistant</li>
-
-                    <li>Coding Assistant</li>
-
-                    <li>Language Tools</li>
-
-                </ul>
-
-            </div>
-
-        </div>
-
-
-
-
-
-        <!-- =========================================
-             INPUT AREA
-        ========================================== -->
-
-        <div class="input-area">
+            <br>
 
             <input
-            type="text"
-            id="user-input"
-            placeholder="Ask anything about Linux, AWS, Docker, Networking...">
+            type="file"
+            id="document-input">
 
+            <br><br>
 
+            <button onclick="uploadDocument()">
 
-            <button onclick="sendMessage()">
-
-                Send
+                Upload Document
 
             </button>
+
+        </div>
+
+
+
+
+
+        <!-- =========================================
+             CHAT SECTION
+        ========================================== -->
+
+        <div id="chat-section">
+
+            <div id="chat-box">
+
+                <div class="message ai">
+
+                    <strong>
+
+                        🚀 DevOps AI
+
+                    </strong>
+
+                    <br><br>
+
+                    Welcome back
+                    <strong>
+
+                        {{ username }}
+
+                    </strong>
+
+                    👋
+
+                    <br><br>
+
+                    Your V3 AI workspace is ready.
+
+                    <br><br>
+
+                    Available systems:
+
+                    <ul>
+
+                        <li>AI Chat</li>
+
+                        <li>Voice AI</li>
+
+                        <li>Document Assistant</li>
+
+                        <li>Coding Assistant</li>
+
+                        <li>Language Tools</li>
+
+                        <li>Recommendation Engine</li>
+
+                        <li>Interview AI</li>
+
+                        <li>Quiz AI</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="input-area">
+
+                <input
+                type="text"
+                id="user-input"
+                placeholder="Ask anything...">
+
+
+
+                <button onclick="sendMessage()">
+
+                    Send
+
+                </button>
+
+
+
+                <button id="record-btn">
+
+                    🎤
+
+                </button>
+
+            </div>
 
         </div>
 
@@ -508,7 +556,7 @@
 
                 <p>
 
-                    Professional AI-powered DevOps workspace.
+                    Professional AI SaaS Workspace.
 
                 </p>
 
@@ -520,23 +568,19 @@
 
                 <h4>
 
-                    📧 Contact
+                    👤 User
 
                 </h4>
 
                 <p>
 
-                    Mahmoud Alghusain
+                    {{ username }}
 
                 </p>
 
                 <p>
 
-                    <a href="mailto:m.j.alghusain@gmail.com">
-
-                        m.j.alghusain@gmail.com
-
-                    </a>
+                    AI Workspace Enabled
 
                 </p>
 
@@ -548,19 +592,19 @@
 
                 <h4>
 
-                    ⚡ Platform
+                    ⚡ Version
 
                 </h4>
 
                 <p>
 
-                    Version 2.1
+                    V3 Professional
 
                 </p>
 
                 <p>
 
-                    Powered by OpenAI & AWS
+                    Powered by OpenAI
 
                 </p>
 
