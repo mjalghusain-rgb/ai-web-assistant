@@ -8,26 +8,175 @@
     <meta name="viewport"
     content="width=device-width, initial-scale=1.0">
 
-    <title>Login</title>
+    <title>
 
-    <link rel="stylesheet"
-    href="/static/auth.css">
+        Register - DevOps AI
+
+    </title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:Arial,sans-serif;
+
+            background:#0b1120;
+
+            color:white;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            min-height:100vh;
+        }
+
+        .register-container{
+
+            width:100%;
+
+            max-width:420px;
+
+            background:#111827;
+
+            padding:40px;
+
+            border-radius:28px;
+
+            border:1px solid #1e293b;
+
+            box-shadow:0 0 30px rgba(0,0,0,0.35);
+        }
+
+        .logo{
+
+            text-align:center;
+
+            font-size:32px;
+
+            margin-bottom:25px;
+
+            color:#38bdf8;
+
+            font-weight:bold;
+        }
+
+        h1{
+
+            margin-bottom:12px;
+
+            text-align:center;
+        }
+
+        p{
+
+            text-align:center;
+
+            color:#94a3b8;
+
+            margin-bottom:30px;
+        }
+
+        input{
+
+            width:100%;
+
+            background:#1e293b;
+
+            border:none;
+
+            padding:16px;
+
+            border-radius:16px;
+
+            color:white;
+
+            margin-bottom:18px;
+
+            font-size:15px;
+        }
+
+        button{
+
+            width:100%;
+
+            background:#38bdf8;
+
+            color:black;
+
+            border:none;
+
+            padding:16px;
+
+            border-radius:16px;
+
+            font-weight:bold;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        button:hover{
+
+            transform:translateY(-2px);
+        }
+
+        .login-link{
+
+            text-align:center;
+
+            margin-top:22px;
+        }
+
+        .login-link a{
+
+            color:#38bdf8;
+
+            text-decoration:none;
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<div class="auth-container">
+    <div class="register-container">
 
-    <div class="auth-card">
+        <div class="logo">
 
-        <h1>Welcome Back</h1>
+            🤖 DevOps AI
+
+        </div>
+
+        <h1>
+
+            Create Account
+
+        </h1>
 
         <p>
-            Login to your AI platform
+
+            Start your AI Workspace journey
+
         </p>
 
         <form method="POST">
+
+            <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required>
 
             <input
             type="email"
@@ -42,24 +191,26 @@
             required>
 
             <button type="submit">
-                Login
+
+                Register
+
             </button>
 
         </form>
 
-        <p class="switch">
+        <div class="login-link">
 
-            Don't have an account?
+            Already have an account?
 
-            <a href="/register">
-                Register
+            <a href="/login">
+
+                Login
+
             </a>
 
-        </p>
+        </div>
 
     </div>
-
-</div>
 
 </body>
 </html>

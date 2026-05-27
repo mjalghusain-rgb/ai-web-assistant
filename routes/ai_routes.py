@@ -1,3 +1,5 @@
+from openai import OpenAI
+import os
 from flask import (
     Blueprint,
     request,
@@ -54,7 +56,9 @@ import os
 # =========================================
 # BLUEPRINT
 # =========================================
-
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
 ai_routes = Blueprint(
     "ai_routes",
     __name__
@@ -488,3 +492,48 @@ def diagram_generator():
 
         "image": image
     })
+# =========================================
+# IMAGE GENERATION
+# =========================================
+
+@ai_routes.route(
+    "/generate-image",
+    methods=["POST"]
+)
+@login_required
+def generate_image():
+
+    data = request.get_json()
+
+    prompt = data.get("prompt")
+
+
+    try:
+
+        response = client.images.generate(
+
+            model="gpt-image-1",
+
+            prompt=prompt,
+
+            size="1024x1024"
+        )
+
+
+        image_url = (
+            response.data[0].url
+        )
+
+
+        return jsonify({
+
+            "image_url": image_url
+        })
+
+
+    except Exception as e:
+
+        return jsonify({
+
+            "error": str(e)
+        }),500

@@ -10,7 +10,7 @@
 
     <title>
 
-        DevOps AI Platform V3
+        DevOps AI Premium
 
     </title>
 
@@ -32,57 +32,73 @@
 
 <div class="top-navbar">
 
-    <div class="nav-left">
+    <div class="navbar-left">
 
-        <h2>
+        <div class="logo-area">
 
-            🚀 DevOps AI
+            🤖
 
-        </h2>
+            <span>
+
+                DevOps AI
+
+            </span>
+
+        </div>
+
+
+
+        <div class="navbar-links">
+
+            <a href="/dashboard">
+
+                Home
+
+            </a>
+
+            <a class="active-link"
+            href="/dashboard">
+
+                Workspace
+
+            </a>
+
+            <a href="/tools">
+
+                AI Tools
+
+            </a>
+
+            <a href="/documents">
+
+                Documents
+
+            </a>
+
+            <a href="/agents">
+
+                AI Agents
+
+            </a>
+
+            <a href="/roadmap">
+
+                Roadmap
+
+            </a>
+
+        </div>
 
     </div>
 
 
 
-    <div class="nav-center">
-
-        <a href="#">
-
-            🏠 Dashboard
-
-        </a>
-
-        <a href="#chat-section">
-
-            🤖 AI Chat
-
-        </a>
-
-        <a href="#tools-section">
-
-            ⚡ Tools
-
-        </a>
-
-        <a href="/profile">
-
-            👤 Profile
-
-        </a>
-
-        <a href="/admin">
-
-            👑 Admin
-
-        </a>
-
-    </div>
+    <div class="navbar-right">
 
 
 
-    <div class="nav-right">
-
-        <button class="voice-toggle"
+        <button
+        class="voice-btn"
         onclick="toggleVoice()">
 
             🔊 Voice ON
@@ -91,45 +107,82 @@
 
 
 
-        <div class="profile-dropdown">
+        <!-- NOTIFICATIONS -->
 
-            <button class="profile-btn">
+        <div
+        class="notification-area">
 
-                👤 {{ username }}
+            <div
+            class="notification-wrapper"
+            onclick="toggleNotifications()">
 
-            </button>
+                🔔
+
+                <span>
+
+                    3
+
+                </span>
+
+            </div>
 
 
 
-            <div class="dropdown-content">
+            <div
+            id="notifications-dropdown"
+            class="notifications-dropdown">
 
-                <a href="/profile">
+                <h3>
 
-                    👤 My Profile
+                    Notifications
 
-                </a>
+                </h3>
 
-                <a href="#">
+                <div id="notifications-list">
 
-                    💾 Saved Chats
+                    <p>
 
-                </a>
+                        Loading notifications...
 
-                <a href="#">
+                    </p>
 
-                    📄 Saved CVs
-
-                </a>
-
-                <a href="/logout">
-
-                    🚪 Logout
-
-                </a>
+                </div>
 
             </div>
 
         </div>
+
+
+
+        <!-- PROFILE -->
+
+        <a
+        href="/profile"
+        class="profile-box">
+
+            <div class="profile-avatar">
+
+                👤
+
+            </div>
+
+            <div>
+
+                <strong>
+
+                    {{ username }}
+
+                </strong>
+
+                <p>
+
+                    Admin
+
+                </p>
+
+            </div>
+
+        </a>
 
     </div>
 
@@ -139,7 +192,11 @@
 
 
 
-<div class="app-container">
+<!-- =========================================
+     MAIN LAYOUT
+========================================= -->
+
+<div class="dashboard-layout">
 
 
 
@@ -147,93 +204,103 @@
          SIDEBAR
     ========================================== -->
 
-    <div class="sidebar">
-
-        <h2 class="logo">
-
-            AI Systems
-
-        </h2>
+    <div class="left-sidebar">
 
 
 
-        <button onclick="setMode('general')">
+        <h3>
 
-            🤖 General AI
+            Saved Chats
 
-        </button>
+        </h3>
 
 
 
-        <button onclick="setMode('devops')">
+        <button class="new-chat-btn">
 
-            ☁️ DevOps AI
+            + New Chat
 
         </button>
 
 
 
-        <button onclick="setMode('coding')">
+        <div class="saved-item">
 
-            💻 Coding Assistant
+            🐳 Docker Deployment
 
-        </button>
-
-
-
-        <button onclick="setMode('language')">
-
-            🌍 Language Tools
-
-        </button>
+        </div>
 
 
 
-        <button onclick="setMode('interview')">
+        <div class="saved-item">
 
-            🎤 Interview AI
+            ☸ Kubernetes Issue
 
-        </button>
-
-
-
-        <button onclick="setMode('quiz')">
-
-            🧠 Skill Assessment
-
-        </button>
+        </div>
 
 
 
-        <button onclick="showResumePrompt()">
+        <div class="saved-item">
 
-            📄 Resume Builder
+            ⚙ Terraform Project
 
-        </button>
-
-
-
-        <button onclick="showRecommendations()">
-
-            🧠 AI Recommendations
-
-        </button>
+        </div>
 
 
 
-        <button onclick="showDockerHelp()">
+        <div class="saved-item">
 
-            🐳 Docker Assistant
+            📄 Resume Optimization
 
-        </button>
+        </div>
 
 
 
-        <button onclick="showTerraformHelp()">
+        <div class="saved-item">
 
-            ⚙ Terraform AI
+            🚀 AWS Architecture
 
-        </button>
+        </div>
+
+
+
+
+
+        <!-- STORAGE -->
+
+        <div class="storage-card">
+
+            <h4>
+
+                ☁ Storage
+
+            </h4>
+
+            <p>
+
+                1.2 GB / 5 GB used
+
+            </p>
+
+
+
+            <div class="storage-bar">
+
+                <div class="storage-progress">
+
+                </div>
+
+            </div>
+
+
+
+            <button>
+
+                Upgrade Storage
+
+            </button>
+
+        </div>
 
     </div>
 
@@ -245,29 +312,83 @@
          MAIN CONTENT
     ========================================== -->
 
-    <div class="main-content">
+    <div class="dashboard-content">
 
 
 
         <!-- =========================================
-             DASHBOARD CARDS
+             WORKSPACE TABS
         ========================================== -->
 
-        <div class="dashboard-grid">
+        <div class="workspace-tabs">
+
+            <button class="active-tab">
+
+                Dashboard
+
+            </button>
+
+            <button>
+
+                AI Chat
+
+            </button>
+
+            <button>
+
+                DevOps
+
+            </button>
+
+            <button>
+
+                Coding
+
+            </button>
+
+            <button>
+
+                Documents
+
+            </button>
+
+            <button>
+
+                Learning
+
+            </button>
+
+        </div>
 
 
 
-            <div class="dashboard-card">
+
+
+        <!-- =========================================
+             STATS CARDS
+        ========================================== -->
+
+        <div class="stats-grid">
+
+
+
+            <div class="stats-card">
 
                 <h3>
 
-                    🤖 AI Chat
+                    💬 Total Chats
 
                 </h3>
 
+                <h1>
+
+                    124
+
+                </h1>
+
                 <p>
 
-                    Advanced AI workspace with memory.
+                    +12 this week
 
                 </p>
 
@@ -275,17 +396,23 @@
 
 
 
-            <div class="dashboard-card">
+            <div class="stats-card">
 
                 <h3>
 
-                    🎤 Whisper AI
+                    📄 Documents
 
                 </h3>
 
+                <h1>
+
+                    23
+
+                </h1>
+
                 <p>
 
-                    Real-time speech recognition.
+                    +4 this week
 
                 </p>
 
@@ -293,17 +420,23 @@
 
 
 
-            <div class="dashboard-card">
+            <div class="stats-card">
 
                 <h3>
 
-                    📄 Document AI
+                    💻 Code Snippets
 
                 </h3>
 
+                <h1>
+
+                    45
+
+                </h1>
+
                 <p>
 
-                    Upload and analyze documents.
+                    +8 this week
 
                 </p>
 
@@ -311,17 +444,23 @@
 
 
 
-            <div class="dashboard-card">
+            <div class="stats-card">
 
                 <h3>
 
-                    🎨 AI Images
+                    🎓 Learning Hours
 
                 </h3>
 
+                <h1>
+
+                    18.5
+
+                </h1>
+
                 <p>
 
-                    Generate logos and diagrams.
+                    +2.5 this week
 
                 </p>
 
@@ -334,23 +473,20 @@
 
 
         <!-- =========================================
-             TOOLS SECTION
+             QUICK TOOLS
         ========================================== -->
 
-        <div id="tools-section"
-        class="tool-panel">
-
-
+        <div class="quick-tools">
 
             <h2>
 
-                ⚡ AI Productivity Tools
+                Quick Tools
 
             </h2>
 
 
 
-            <div class="tool-buttons">
+            <div class="tools-grid">
 
 
 
@@ -364,7 +500,7 @@
 
                 <button onclick="showTranslationPrompt()">
 
-                    🌍 Translator
+                    🌍 Translation
 
                 </button>
 
@@ -372,7 +508,7 @@
 
                 <button onclick="showGrammarPrompt()">
 
-                    ✍ Grammar Fixer
+                    ✍ Grammar Check
 
                 </button>
 
@@ -386,25 +522,17 @@
 
 
 
-                <button onclick="showCareerAdvice()">
-
-                    🚀 Career Advice
-
-                </button>
-
-
-
-                <button onclick="showLearningPath()">
-
-                    📚 Learning Path
-
-                </button>
-
-
-
                 <button onclick="showImagePrompt()">
 
-                    🎨 Image Generator
+                    🎨 AI Images
+
+                </button>
+
+
+
+                <button>
+
+                    📊 Diagrams
 
                 </button>
 
@@ -417,30 +545,45 @@
 
 
         <!-- =========================================
-             DOCUMENT UPLOAD
+             UPLOAD BAR
         ========================================== -->
 
-        <div class="upload-box">
+        <div class="upload-bar"
+        id="drop-zone">
 
-            <h3>
+            <div class="upload-left">
 
-                📁 Upload Document
+                <h3>
 
-            </h3>
+                    📁 Upload Document
 
-            <br>
+                </h3>
 
-            <input
-            type="file"
-            id="document-input">
+                <p>
 
-            <br><br>
+                    Drag & Drop files here
+                    or click upload
 
-            <button onclick="uploadDocument()">
+                </p>
 
-                Upload Document
+            </div>
 
-            </button>
+
+
+            <div class="upload-right">
+
+                <input
+                type="file"
+                id="document-input">
+
+                <button
+                onclick="uploadDocument()">
+
+                    Upload
+
+                </button>
+
+            </div>
 
         </div>
 
@@ -449,10 +592,154 @@
 
 
         <!-- =========================================
-             CHAT SECTION
+             AI IMAGE GALLERY
         ========================================== -->
 
-        <div id="chat-section">
+        <div class="image-gallery">
+
+            <div class="gallery-header">
+
+                <h2>
+
+                    🎨 AI Generated Images
+
+                </h2>
+
+                <p>
+
+                    Your generated AI visuals
+                    will appear here.
+
+                </p>
+
+            </div>
+
+
+
+            <div
+            id="generated-images"
+            class="generated-images-grid">
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <!-- =========================================
+             AI CODING PLAYGROUND
+        ========================================== -->
+
+        <div class="coding-playground">
+
+            <div class="playground-header">
+
+                <div>
+
+                    <h2>
+
+                        💻 AI Coding Playground
+
+                    </h2>
+
+                    <p>
+
+                        AI generated code will appear here.
+
+                    </p>
+
+                </div>
+
+
+
+                <div class="language-tabs">
+
+                    <button class="active-language">
+
+                        Python
+
+                    </button>
+
+                    <button>
+
+                        JavaScript
+
+                    </button>
+
+                    <button>
+
+                        Bash
+
+                    </button>
+
+                    <button>
+
+                        YAML
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="code-editor-container">
+
+                <div class="editor-topbar">
+
+                    <div class="editor-dots">
+
+                        <span class="dot red"></span>
+
+                        <span class="dot yellow"></span>
+
+                        <span class="dot green"></span>
+
+                    </div>
+
+
+
+                    <button
+                    onclick="copyGeneratedCode()"
+                    class="copy-code-btn">
+
+                        📋 Copy
+
+                    </button>
+
+                </div>
+
+
+
+                <pre id="generated-code-block">
+
+<code class="language-python">
+
+# AI generated code
+# will appear here
+
+</code>
+
+                </pre>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <!-- =========================================
+             CHAT WORKSPACE
+        ========================================== -->
+
+        <div class="chat-workspace">
+
+
 
             <div id="chat-box">
 
@@ -466,7 +753,7 @@
 
                     <br><br>
 
-                    Welcome back
+                    Hello
                     <strong>
 
                         {{ username }}
@@ -477,31 +764,8 @@
 
                     <br><br>
 
-                    Your V3 AI workspace is ready.
-
-                    <br><br>
-
-                    Available systems:
-
-                    <ul>
-
-                        <li>AI Chat</li>
-
-                        <li>Voice AI</li>
-
-                        <li>Document Assistant</li>
-
-                        <li>Coding Assistant</li>
-
-                        <li>Language Tools</li>
-
-                        <li>Recommendation Engine</li>
-
-                        <li>Interview AI</li>
-
-                        <li>Quiz AI</li>
-
-                    </ul>
+                    Your Premium AI Workspace
+                    is ready.
 
                 </div>
 
@@ -514,7 +778,16 @@
                 <input
                 type="text"
                 id="user-input"
-                placeholder="Ask anything...">
+                placeholder="Type your message...">
+
+
+
+                <button
+                id="record-btn">
+
+                    🎤
+
+                </button>
 
 
 
@@ -522,95 +795,11 @@
 
                     Send
 
-                </button>
-
-
-
-                <button id="record-btn">
-
-                    🎤
-
-                </button>
+                    </button>
 
             </div>
 
         </div>
-
-
-
-
-
-        <!-- =========================================
-             FOOTER
-        ========================================== -->
-
-        <footer class="footer">
-
-            <div>
-
-                <h3>
-
-                    🚀 DevOps AI Platform
-
-                </h3>
-
-                <p>
-
-                    Professional AI SaaS Workspace.
-
-                </p>
-
-            </div>
-
-
-
-            <div>
-
-                <h4>
-
-                    👤 User
-
-                </h4>
-
-                <p>
-
-                    {{ username }}
-
-                </p>
-
-                <p>
-
-                    AI Workspace Enabled
-
-                </p>
-
-            </div>
-
-
-
-            <div>
-
-                <h4>
-
-                    ⚡ Version
-
-                </h4>
-
-                <p>
-
-                    V3 Professional
-
-                </p>
-
-                <p>
-
-                    Powered by OpenAI
-
-                </p>
-
-            </div>
-
-        </footer>
 
     </div>
 

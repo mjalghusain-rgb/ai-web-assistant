@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        Documents - DevOps AI
+
+    </title>
+
+    <link rel="stylesheet"
+    href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+
+
+    <!-- SIDEBAR -->
+
+    <div class="left-sidebar">
+
+        <h3>
+
+            📄 Documents
+
+        </h3>
+
+        <a href="/dashboard"
+        class="saved-item">
+
+            Dashboard
+
+        </a>
+
+        <a href="/profile"
+        class="saved-item">
+
+            Profile
+
+        </a>
+
+        <a href="/documents"
+        class="saved-item">
+
+            My Documents
+
+        </a>
+
+    </div>
+
+
+
+    <!-- CONTENT -->
+
+    <div class="dashboard-content">
+
+
+
+        <div class="stats-card">
+
+            <h2>
+
+                📄 Uploaded Documents
+
+            </h2>
+
+            <br>
+
+
+
+            {% if documents %}
+
+                {% for doc in documents %}
+
+                    <div class="notification-item">
+
+                        <strong>
+
+                            {{ doc.original_filename }}
+
+                        </strong>
+
+                        <p>
+
+                            {{ doc.file_type }}
+
+                        </p>
+
+                        <p>
+
+                            {{ doc.file_size }} bytes
+
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>
+
+                    No uploaded documents yet.
+
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
