@@ -4,7 +4,8 @@ from flask import (
     request,
     jsonify,
     redirect,
-    url_for
+    url_for,
+    send_from_directory
 )
 
 from flask_login import (
@@ -124,20 +125,55 @@ with app.app_context():
 
 
 # =========================================
-# HOME
+# HOME PAGE
 # =========================================
 
 @app.route("/")
 def home():
 
-    if current_user.is_authenticated:
+    return render_template(
+        "home.html"
+    )
 
-        return redirect(
-            url_for("dashboard")
-        )
 
-    return redirect(
-        url_for("login")
+
+# =========================================
+# DASHBOARD
+# =========================================
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+
+    notifications = Notification.query.filter_by(
+
+        user_id=current_user.id
+
+    ).order_by(
+
+        Notification.created_at.desc()
+
+    ).limit(5).all()
+
+
+    documents = Document.query.filter_by(
+
+        user_id=current_user.id
+
+    ).all()
+
+
+    return render_template(
+
+        "index.html",
+
+        username=current_user.username,
+
+        user=current_user,
+
+        notifications=notifications,
+
+        documents=documents
     )
 
 
@@ -276,46 +312,7 @@ def logout():
     logout_user()
 
     return redirect(
-        url_for("login")
-    )
-
-
-
-# =========================================
-# DASHBOARD
-# =========================================
-
-@app.route("/dashboard")
-@login_required
-def dashboard():
-
-    notifications = Notification.query.filter_by(
-
-        user_id=current_user.id
-
-    ).order_by(
-
-        Notification.created_at.desc()
-
-    ).limit(5).all()
-
-
-    documents = Document.query.filter_by(
-
-        user_id=current_user.id
-
-    ).all()
-
-
-    return render_template(
-
-        "index.html",
-
-        username=current_user.username,
-
-        notifications=notifications,
-
-        documents=documents
+        url_for("home")
     )
 
 
@@ -335,11 +332,6 @@ def chat():
 
     user_message = data.get(
         "message"
-    )
-
-    mode = data.get(
-        "mode",
-        "general"
     )
 
 
@@ -478,14 +470,6 @@ def upload_document():
     ]
 
 
-    if file.filename == "":
-
-        return jsonify({
-
-            "error":"Empty filename"
-        })
-
-
     filename = secure_filename(
         file.filename
     )
@@ -555,45 +539,6 @@ def upload_document():
 
 
 # =========================================
-# NOTIFICATIONS API
-# =========================================
-
-@app.route("/notifications")
-@login_required
-def get_notifications():
-
-    notifications = Notification.query.filter_by(
-
-        user_id=current_user.id
-
-    ).order_by(
-
-        Notification.created_at.desc()
-
-    ).all()
-
-
-    result = []
-
-
-    for n in notifications:
-
-        result.append({
-
-            "title":n.title,
-
-            "message":n.message,
-
-            "is_read":n.is_read
-        })
-
-
-    return jsonify(result)
-
-
-
-
-# =========================================
 # PROFILE
 # =========================================
 
@@ -605,6 +550,37 @@ def get_notifications():
 def profile():
 
     if request.method == "POST":
+
+
+        # PROFILE IMAGE
+
+        if "profile_image" in request.files:
+
+            image = request.files[
+                "profile_image"
+            ]
+
+
+            if image.filename != "":
+
+                filename = secure_filename(
+                    image.filename
+                )
+
+                unique_name = f"{uuid.uuid4()}_{filename}"
+
+                save_path = os.path.join(
+
+                    app.config["UPLOAD_FOLDER"],
+
+                    unique_name
+                )
+
+                image.save(save_path)
+
+                current_user.profile_image = unique_name
+
+
 
         current_user.username = request.form.get(
             "username"
@@ -660,6 +636,8 @@ def profile():
         user=current_user
     )
 
+
+
 # =========================================
 # DOCUMENTS PAGE
 # =========================================
@@ -687,6 +665,7 @@ def documents_page():
     )
 
 
+
 # =========================================
 # TOOLS PAGE
 # =========================================
@@ -698,6 +677,8 @@ def tools_page():
     return render_template(
         "tools.html"
     )
+
+
 
 # =========================================
 # AGENTS PAGE
@@ -712,6 +693,7 @@ def agents_page():
     )
 
 
+
 # =========================================
 # ROADMAP PAGE
 # =========================================
@@ -723,6 +705,60 @@ def roadmap_page():
     return render_template(
         "roadmap.html"
     )
+
+
+
+# =========================================
+# NOTIFICATIONS API
+# =========================================
+
+@app.route("/notifications")
+@login_required
+def get_notifications():
+
+    notifications = Notification.query.filter_by(
+
+        user_id=current_user.id
+
+    ).order_by(
+
+        Notification.created_at.desc()
+
+    ).all()
+
+
+    result = []
+
+
+    for n in notifications:
+
+        result.append({
+
+            "title":n.title,
+
+            "message":n.message
+        })
+
+
+    return jsonify(result)
+
+
+
+# =========================================
+# UPLOADS
+# =========================================
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+
+    return send_from_directory(
+
+        app.config["UPLOAD_FOLDER"],
+
+        filename
+    )
+
+
 
 # =========================================
 # RUN

@@ -50,7 +50,7 @@
 
         <div class="navbar-links">
 
-            <a href="/dashboard">
+            <a href="/">
 
                 Home
 
@@ -120,7 +120,7 @@
 
                 <span>
 
-                    3
+                    {{ notifications|length }}
 
                 </span>
 
@@ -138,13 +138,41 @@
 
                 </h3>
 
+
+
                 <div id="notifications-list">
 
-                    <p>
+                    {% if notifications %}
 
-                        Loading notifications...
+                        {% for notification in notifications %}
 
-                    </p>
+                            <div class="notification-item">
+
+                                <strong>
+
+                                    {{ notification.title }}
+
+                                </strong>
+
+                                <p>
+
+                                    {{ notification.message }}
+
+                                </p>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p>
+
+                            No notifications
+
+                        </p>
+
+                    {% endif %}
 
                 </div>
 
@@ -156,33 +184,88 @@
 
         <!-- PROFILE -->
 
-        <a
-        href="/profile"
-        class="profile-box">
+        <div
+        class="profile-dropdown-wrapper">
 
-            <div class="profile-avatar">
+            <div
+            class="profile-box"
+            onclick="toggleProfileMenu()">
 
-                👤
+                {% if user.profile_image %}
+
+                    <img
+                    src="/uploads/{{ user.profile_image }}"
+                    class="navbar-profile-image">
+
+                {% else %}
+
+                    <div class="profile-avatar">
+
+                        👤
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <div>
+
+                    <strong>
+
+                        {{ username }}
+
+                    </strong>
+
+                    <p>
+
+                        Premium User
+
+                    </p>
+
+                </div>
 
             </div>
 
-            <div>
 
-                <strong>
 
-                    {{ username }}
+            <div
+            id="profile-dropdown"
+            class="profile-dropdown">
 
-                </strong>
+                <a href="/profile">
 
-                <p>
+                    👤 My Profile
 
-                    Admin
+                </a>
 
-                </p>
+                <a href="/documents">
+
+                    📄 Documents
+
+                </a>
+
+                <a href="/tools">
+
+                    🛠 AI Tools
+
+                </a>
+
+                <a href="/agents">
+
+                    🤖 AI Agents
+
+                </a>
+
+                <a href="/logout">
+
+                    🚪 Logout
+
+                </a>
 
             </div>
 
-        </a>
+        </div>
 
     </div>
 
@@ -200,9 +283,7 @@
 
 
 
-    <!-- =========================================
-         SIDEBAR
-    ========================================== -->
+    <!-- SIDEBAR -->
 
     <div class="left-sidebar">
 
@@ -224,7 +305,9 @@
 
 
 
-        <div class="saved-item">
+        <div
+        class="saved-item"
+        onclick="loadPresetChat('docker')">
 
             🐳 Docker Deployment
 
@@ -232,7 +315,9 @@
 
 
 
-        <div class="saved-item">
+        <div
+        class="saved-item"
+        onclick="loadPresetChat('kubernetes')">
 
             ☸ Kubernetes Issue
 
@@ -240,7 +325,9 @@
 
 
 
-        <div class="saved-item">
+        <div
+        class="saved-item"
+        onclick="loadPresetChat('terraform')">
 
             ⚙ Terraform Project
 
@@ -248,7 +335,9 @@
 
 
 
-        <div class="saved-item">
+        <div
+        class="saved-item"
+        onclick="loadPresetChat('resume')">
 
             📄 Resume Optimization
 
@@ -256,13 +345,13 @@
 
 
 
-        <div class="saved-item">
+        <div
+        class="saved-item"
+        onclick="loadPresetChat('aws')">
 
             🚀 AWS Architecture
 
         </div>
-
-
 
 
 
@@ -308,17 +397,13 @@
 
 
 
-    <!-- =========================================
-         MAIN CONTENT
-    ========================================== -->
+    <!-- MAIN CONTENT -->
 
     <div class="dashboard-content">
 
 
 
-        <!-- =========================================
-             WORKSPACE TABS
-        ========================================== -->
+        <!-- WORKSPACE TABS -->
 
         <div class="workspace-tabs">
 
@@ -362,11 +447,7 @@
 
 
 
-
-
-        <!-- =========================================
-             STATS CARDS
-        ========================================== -->
+        <!-- STATS -->
 
         <div class="stats-grid">
 
@@ -406,13 +487,13 @@
 
                 <h1>
 
-                    23
+                    {{ documents|length }}
 
                 </h1>
 
                 <p>
 
-                    +4 this week
+                    Uploaded documents
 
                 </p>
 
@@ -472,9 +553,7 @@
 
 
 
-        <!-- =========================================
-             QUICK TOOLS
-        ========================================== -->
+        <!-- QUICK TOOLS -->
 
         <div class="quick-tools">
 
@@ -530,7 +609,7 @@
 
 
 
-                <button>
+                <button onclick="generateDiagramIdea()">
 
                     📊 Diagrams
 
@@ -544,46 +623,33 @@
 
 
 
-        <!-- =========================================
-             UPLOAD BAR
-        ========================================== -->
+        <!-- UPLOAD -->
 
-        <div class="upload-bar"
-        id="drop-zone">
+        <div class="quick-tools">
 
-            <div class="upload-left">
+            <h2>
 
-                <h3>
+                📁 Upload Documents
 
-                    📁 Upload Document
-
-                </h3>
-
-                <p>
-
-                    Drag & Drop files here
-                    or click upload
-
-                </p>
-
-            </div>
+            </h2>
 
 
 
-            <div class="upload-right">
+            <input
+            type="file"
+            id="document-input">
 
-                <input
-                type="file"
-                id="document-input">
+            <br><br>
 
-                <button
-                onclick="uploadDocument()">
 
-                    Upload
 
-                </button>
+            <button
+            class="voice-btn"
+            onclick="uploadDocument()">
 
-            </div>
+                Upload File
+
+            </button>
 
         </div>
 
@@ -591,28 +657,15 @@
 
 
 
-        <!-- =========================================
-             AI IMAGE GALLERY
-        ========================================== -->
+        <!-- GENERATED IMAGES -->
 
-        <div class="image-gallery">
+        <div class="quick-tools">
 
-            <div class="gallery-header">
+            <h2>
 
-                <h2>
+                🎨 Generated Images
 
-                    🎨 AI Generated Images
-
-                </h2>
-
-                <p>
-
-                    Your generated AI visuals
-                    will appear here.
-
-                </p>
-
-            </div>
+            </h2>
 
 
 
@@ -628,104 +681,36 @@
 
 
 
-        <!-- =========================================
-             AI CODING PLAYGROUND
-        ========================================== -->
+        <!-- CODE PLAYGROUND -->
 
-        <div class="coding-playground">
+        <div class="quick-tools">
 
-            <div class="playground-header">
+            <h2>
 
-                <div>
+                💻 AI Coding Playground
 
-                    <h2>
-
-                        💻 AI Coding Playground
-
-                    </h2>
-
-                    <p>
-
-                        AI generated code will appear here.
-
-                    </p>
-
-                </div>
+            </h2>
 
 
 
-                <div class="language-tabs">
+            <button
+            class="voice-btn"
+            onclick="copyGeneratedCode()">
 
-                    <button class="active-language">
+                📋 Copy Code
 
-                        Python
+            </button>
 
-                    </button>
-
-                    <button>
-
-                        JavaScript
-
-                    </button>
-
-                    <button>
-
-                        Bash
-
-                    </button>
-
-                    <button>
-
-                        YAML
-
-                    </button>
-
-                </div>
-
-            </div>
+            <br><br>
 
 
 
-            <div class="code-editor-container">
-
-                <div class="editor-topbar">
-
-                    <div class="editor-dots">
-
-                        <span class="dot red"></span>
-
-                        <span class="dot yellow"></span>
-
-                        <span class="dot green"></span>
-
-                    </div>
-
-
-
-                    <button
-                    onclick="copyGeneratedCode()"
-                    class="copy-code-btn">
-
-                        📋 Copy
-
-                    </button>
-
-                </div>
-
-
-
-                <pre id="generated-code-block">
-
-<code class="language-python">
+            <pre id="generated-code-block">
 
 # AI generated code
 # will appear here
 
-</code>
-
-                </pre>
-
-            </div>
+            </pre>
 
         </div>
 
@@ -733,9 +718,7 @@
 
 
 
-        <!-- =========================================
-             CHAT WORKSPACE
-        ========================================== -->
+        <!-- CHAT -->
 
         <div class="chat-workspace">
 
@@ -753,7 +736,7 @@
 
                     <br><br>
 
-                    Hello
+                    Welcome back
                     <strong>
 
                         {{ username }}
@@ -761,11 +744,6 @@
                     </strong>
 
                     👋
-
-                    <br><br>
-
-                    Your Premium AI Workspace
-                    is ready.
 
                 </div>
 
@@ -795,7 +773,7 @@
 
                     Send
 
-                    </button>
+                </button>
 
             </div>
 

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        DevOps AI Platform
+
+    </title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:Arial,sans-serif;
+
+            background:#020617;
+
+            color:white;
+        }
+
+
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .top-navbar{
+
+            height:80px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            padding:0 60px;
+
+            border-bottom:1px solid #1e293b;
+        }
+
+
+        .logo{
+
+            font-size:28px;
+
+            font-weight:bold;
+
+            color:#38bdf8;
+
+            display:flex;
+
+            align-items:center;
+
+            gap:12px;
+        }
+
+
+        .nav-links{
+
+            display:flex;
+
+            gap:22px;
+
+            align-items:center;
+        }
+
+
+        .nav-links a{
+
+            color:#cbd5e1;
+
+            text-decoration:none;
+
+            transition:0.3s;
+        }
+
+
+        .nav-links a:hover{
+
+            color:#38bdf8;
+        }
+
+
+        .login-btn{
+
+            padding:14px 24px;
+
+            border:1px solid #38bdf8;
+
+            border-radius:16px;
+        }
+
+
+        .start-btn{
+
+            background:#38bdf8;
+
+            color:black !important;
+
+            padding:14px 24px;
+
+            border-radius:16px;
+
+            font-weight:bold;
+        }
+
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero{
+
+            min-height:90vh;
+
+            display:flex;
+
+            flex-direction:column;
+
+            justify-content:center;
+
+            align-items:center;
+
+            text-align:center;
+
+            padding:40px;
+        }
+
+
+        .hero h1{
+
+            font-size:82px;
+
+            margin-bottom:30px;
+
+            line-height:1.1;
+
+            background:linear-gradient(
+                90deg,
+                #38bdf8,
+                #818cf8
+            );
+
+            -webkit-background-clip:text;
+
+            -webkit-text-fill-color:transparent;
+        }
+
+
+        .hero p{
+
+            max-width:900px;
+
+            line-height:1.8;
+
+            color:#cbd5e1;
+
+            font-size:24px;
+
+            margin-bottom:50px;
+        }
+
+
+        .hero-buttons{
+
+            display:flex;
+
+            gap:24px;
+
+            flex-wrap:wrap;
+        }
+
+
+        .hero-buttons a{
+
+            text-decoration:none;
+
+            padding:20px 38px;
+
+            border-radius:20px;
+
+            font-weight:bold;
+
+            transition:0.3s;
+        }
+
+
+        .primary-btn{
+
+            background:#38bdf8;
+
+            color:black;
+        }
+
+
+        .secondary-btn{
+
+            border:1px solid #38bdf8;
+
+            color:#38bdf8;
+        }
+
+
+        .hero-buttons a:hover{
+
+            transform:translateY(-4px);
+        }
+
+
+
+        /* =========================================
+           FEATURES
+        ========================================= */
+
+        .features{
+
+            padding:100px 60px;
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(auto-fit,minmax(300px,1fr));
+
+            gap:30px;
+        }
+
+
+        .feature-card{
+
+            background:#071029;
+
+            padding:40px;
+
+            border-radius:30px;
+
+            border:1px solid #1e293b;
+
+            transition:0.3s;
+        }
+
+
+        .feature-card:hover{
+
+            transform:translateY(-5px);
+        }
+
+
+        .feature-card h2{
+
+            margin-bottom:20px;
+
+            color:#38bdf8;
+        }
+
+
+        .feature-card p{
+
+            color:#cbd5e1;
+
+            line-height:1.8;
+        }
+
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer{
+
+            padding:40px;
+
+            text-align:center;
+
+            color:#94a3b8;
+
+            border-top:1px solid #1e293b;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+<!-- =========================================
+     NAVBAR
+========================================= -->
+
+<div class="top-navbar">
+
+    <div class="logo">
+
+        🤖
+
+        <span>
+
+            DevOps AI
+
+        </span>
+
+    </div>
+
+
+
+    <div class="nav-links">
+
+        <a href="/login"
+        class="login-btn">
+
+            Login
+
+        </a>
+
+
+
+        <a href="/register"
+        class="start-btn">
+
+            Get Started
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- =========================================
+     HERO
+========================================= -->
+
+<section class="hero">
+
+    <h1>
+
+        AI Workspace<br>
+
+        For DevOps Engineers
+
+    </h1>
+
+    <p>
+
+        Autonomous AI platform for
+        DevOps, Docker, Kubernetes,
+        Terraform, Infrastructure,
+        Cloud Automation and AI Agents.
+
+    </p>
+
+
+
+    <div class="hero-buttons">
+
+        <a
+        href="/register"
+        class="primary-btn">
+
+            🚀 Start Free
+
+        </a>
+
+
+
+        <a
+        href="/login"
+        class="secondary-btn">
+
+            🔐 Login
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- =========================================
+     FEATURES
+========================================= -->
+
+<section class="features">
+
+
+
+    <div class="feature-card">
+
+        <h2>
+
+            🤖 AI Agents
+
+        </h2>
+
+        <p>
+
+            Autonomous AI agents
+            for DevOps operations,
+            infrastructure and automation.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="feature-card">
+
+        <h2>
+
+            ☁ Cloud Infrastructure
+
+        </h2>
+
+        <p>
+
+            AWS, Terraform,
+            Docker and Kubernetes
+            deployment workflows.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="feature-card">
+
+        <h2>
+
+            💻 AI Coding
+
+        </h2>
+
+        <p>
+
+            Generate infrastructure code,
+            scripts and automation instantly.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="feature-card">
+
+        <h2>
+
+            📄 AI Workspace
+
+        </h2>
+
+        <p>
+
+            Chat, uploads,
+            AI tools and coding playground
+            inside one workspace.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="feature-card">
+
+        <h2>
+
+            🚀 SaaS Platform
+
+        </h2>
+
+        <p>
+
+            Modern scalable SaaS
+            platform architecture
+            ready for future growth.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="feature-card">
+
+        <h2>
+
+            🔐 Secure Platform
+
+        </h2>
+
+        <p>
+
+            Authentication system,
+            user profiles,
+            notifications and uploads.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer>
+
+    © 2026 DevOps AI Platform —
+    Built with Flask & OpenAI
+
+</footer>
+
+</body>
+</html>

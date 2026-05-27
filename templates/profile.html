@@ -35,35 +35,47 @@
 
         </h3>
 
-        <div class="saved-item">
+        <a href="/dashboard"
+        class="saved-item">
 
             Dashboard
 
-        </div>
+        </a>
 
-        <div class="saved-item">
+        <a href="/documents"
+        class="saved-item">
 
             Documents
 
-        </div>
+        </a>
 
-        <div class="saved-item">
+        <a href="/tools"
+        class="saved-item">
 
-            Notifications
+            AI Tools
 
-        </div>
+        </a>
 
-        <div class="saved-item">
+        <a href="/agents"
+        class="saved-item">
 
-            Settings
+            AI Agents
 
-        </div>
+        </a>
 
-        <div class="saved-item">
+        <a href="/roadmap"
+        class="saved-item">
+
+            Roadmap
+
+        </a>
+
+        <a href="/logout"
+        class="saved-item">
 
             Logout
 
-        </div>
+        </a>
 
     </div>
 
@@ -87,7 +99,71 @@
 
 
 
-            <form method="POST">
+            <!-- PROFILE IMAGE -->
+
+            <div style="text-align:center;">
+
+
+
+                {% if user.profile_image != "default.png" %}
+
+                    <img
+                    src="/uploads/{{ user.profile_image }}"
+                    style="
+                    width:140px;
+                    height:140px;
+                    border-radius:50%;
+                    object-fit:cover;
+                    border:4px solid #38bdf8;
+                    margin-bottom:20px;">
+
+                {% else %}
+
+                    <div style="
+                    width:140px;
+                    height:140px;
+                    border-radius:50%;
+                    background:#1e293b;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:60px;
+                    margin:auto;
+                    margin-bottom:20px;">
+
+                        👤
+
+                    </div>
+
+                {% endif %}
+
+
+
+            </div>
+
+
+
+            <!-- PROFILE FORM -->
+
+            <form
+            method="POST"
+            enctype="multipart/form-data">
+
+
+
+                <label>
+
+                    Upload Profile Image
+
+                </label>
+
+                <br><br>
+
+                <input
+                type="file"
+                name="profile_image">
+
+                <br><br>
 
 
 
@@ -143,8 +219,14 @@
 
                 <textarea
                 name="bio"
-                placeholder="Bio"
-                style="width:100%;height:120px;padding:16px;border-radius:16px;background:#1e293b;color:white;border:none;">{{ user.bio }}</textarea>
+                style="
+                width:100%;
+                height:120px;
+                padding:16px;
+                border-radius:16px;
+                background:#1e293b;
+                color:white;
+                border:none;">{{ user.bio }}</textarea>
 
                 <br><br>
 
@@ -152,8 +234,14 @@
 
                 <textarea
                 name="skills"
-                placeholder="Skills"
-                style="width:100%;height:120px;padding:16px;border-radius:16px;background:#1e293b;color:white;border:none;">{{ user.skills }}</textarea>
+                style="
+                width:100%;
+                height:120px;
+                padding:16px;
+                border-radius:16px;
+                background:#1e293b;
+                color:white;
+                border:none;">{{ user.skills }}</textarea>
 
                 <br><br>
 
