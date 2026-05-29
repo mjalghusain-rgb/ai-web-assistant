@@ -5,90 +5,210 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-    content="width=device-width, initial-scale=1.0">
+    <title>
 
-    <title>Admin Dashboard</title>
+        Admin Dashboard
 
-    <link rel="stylesheet"
-    href="/static/style.css">
+    </title>
+
+    <style>
+
+        body{
+
+            background:#020617;
+
+            color:white;
+
+            font-family:Arial;
+
+            padding:40px;
+        }
+
+        h1{
+
+            margin-bottom:40px;
+        }
+
+        .stats{
+
+            display:flex;
+
+            gap:30px;
+
+            margin-bottom:50px;
+        }
+
+        .card{
+
+            background:#071029;
+
+            padding:30px;
+
+            border-radius:20px;
+
+            min-width:220px;
+        }
+
+        .card h2{
+
+            color:#38bdf8;
+        }
+
+        .user-card{
+
+            background:#071029;
+
+            padding:25px;
+
+            border-radius:20px;
+
+            margin-bottom:20px;
+        }
+
+        .delete-btn{
+
+            display:inline-block;
+
+            margin-top:15px;
+
+            background:red;
+
+            color:white;
+
+            padding:10px 20px;
+
+            border-radius:10px;
+
+            text-decoration:none;
+        }
+
+        .back-btn{
+
+            display:inline-block;
+
+            margin-top:40px;
+
+            color:#38bdf8;
+
+            text-decoration:none;
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<div class="main-content">
 
-    <h1>
-        👑 Admin Dashboard
-    </h1>
 
-    <br>
+<h1>
 
-    <div class="tools-row">
+    👑 Admin Dashboard
 
-        <div class="tool-card">
+</h1>
 
-            <h2>
-                Total Users
-            </h2>
 
-            <h1>
-                {{ total_users }}
-            </h1>
 
-        </div>
+<div class="stats">
 
-        <div class="tool-card">
-
-            <h2>
-                Total Chats
-            </h2>
-
-            <h1>
-                {{ total_chats }}
-            </h1>
-
-        </div>
-
-    </div>
-
-    <br>
-
-    <div class="tool-card">
+    <div class="card">
 
         <h2>
-            Latest Users
+
+            Total Users
+
         </h2>
 
-        <br>
+        <h1>
 
-        {% for user in latest_users %}
+            {{ users|length }}
 
-            <p>
-
-                👤 {{ user.username }}
-
-                —
-                {{ user.email }}
-
-            </p>
-
-            <br>
-
-        {% endfor %}
+        </h1>
 
     </div>
 
-    <br>
 
-    <a href="/">
 
-        ← Back to Platform
+    <div class="card">
+
+        <h2>
+
+            Total Chats
+
+        </h2>
+
+        <h1>
+
+            124
+
+        </h1>
+
+    </div>
+
+</div>
+
+
+
+
+
+<h1>
+
+    Latest Users
+
+</h1>
+
+
+
+{% for user in users %}
+
+<div class="user-card">
+
+    <h2>
+
+        {{ user.username }}
+
+    </h2>
+
+    <p>
+
+        {{ user.email }}
+
+    </p>
+
+
+
+    <p>
+
+        Admin:
+        {{ user.is_admin }}
+
+    </p>
+
+
+
+    <a
+    class="delete-btn"
+    href="/delete-user/{{ user.id }}">
+
+        Delete User
 
     </a>
 
 </div>
+
+{% endfor %}
+
+
+
+
+
+<a
+class="back-btn"
+href="/dashboard">
+
+    ← Back to Platform
+
+</a>
 
 </body>
 </html>

@@ -202,6 +202,46 @@ def register():
             "password"
         )
 
+       
+        # PASSWORD VALIDATION
+
+        if len(password) < 6:
+
+            return "Password must be at least 6 characters"
+
+
+        has_uppercase = any(
+
+            char.isupper()
+
+            for char in password
+        )
+
+
+        has_digit = any(
+
+            char.isdigit()
+
+            for char in password
+        )
+
+
+        only_letters_numbers = password.isalnum()
+
+
+        if not has_uppercase:
+
+            return "Password must contain at least one uppercase letter"
+
+
+        if not has_digit:
+
+            return "Password must contain at least one number"
+
+
+        if not only_letters_numbers:
+
+            return "Password cannot contain symbols"
 
         existing_user = User.query.filter(
 
@@ -298,7 +338,6 @@ def login():
     return render_template(
         "login.html"
     )
-
 
 
 # =========================================
@@ -764,6 +803,49 @@ def uploaded_file(filename):
 # RUN
 # =========================================
 
+@app.route("/admin")
+@login_required
+def admin_panel():
+
+    if not current_user.is_admin:
+
+        return "Access denied"
+
+
+    users = User.query.all()
+
+
+    return render_template(
+
+        "admin.html",
+
+        users=users
+    )
+
+
+
+
+
+@app.route("/delete-user/<int:user_id>")
+@login_required
+def delete_user(user_id):
+
+    if not current_user.is_admin:
+
+        return "Access denied"
+
+
+    user = User.query.get(user_id)
+
+
+    if user:
+
+        db.session.delete(user)
+
+        db.session.commit()
+
+
+    return redirect("/admin")
 if __name__ == "__main__":
 
     app.run(

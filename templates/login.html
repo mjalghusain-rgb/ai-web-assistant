@@ -10,7 +10,7 @@
 
     <title>
 
-        Register - DevOps AI
+        Login
 
     </title>
 
@@ -26,9 +26,7 @@
 
             font-family:Arial,sans-serif;
 
-            background:#0b1120;
-
-            color:white;
+            background:#020617;
 
             display:flex;
 
@@ -37,32 +35,30 @@
             align-items:center;
 
             min-height:100vh;
+
+            color:white;
         }
 
-        .register-container{
+        .auth-box{
 
-            width:100%;
+            width:520px;
 
-            max-width:420px;
+            background:#071029;
 
-            background:#111827;
+            padding:60px;
 
-            padding:40px;
-
-            border-radius:28px;
+            border-radius:40px;
 
             border:1px solid #1e293b;
-
-            box-shadow:0 0 30px rgba(0,0,0,0.35);
         }
 
         .logo{
 
             text-align:center;
 
-            font-size:32px;
+            margin-bottom:40px;
 
-            margin-bottom:25px;
+            font-size:30px;
 
             color:#38bdf8;
 
@@ -71,77 +67,81 @@
 
         h1{
 
-            margin-bottom:12px;
-
             text-align:center;
+
+            margin-bottom:20px;
+
+            font-size:64px;
         }
 
-        p{
+        .subtitle{
 
             text-align:center;
 
             color:#94a3b8;
 
-            margin-bottom:30px;
+            margin-bottom:50px;
+
+            font-size:22px;
+        }
+
+        form{
+
+            display:flex;
+
+            flex-direction:column;
+
+            gap:28px;
         }
 
         input{
-
-            width:100%;
 
             background:#1e293b;
 
             border:none;
 
-            padding:16px;
+            padding:24px;
 
-            border-radius:16px;
+            border-radius:22px;
 
             color:white;
 
-            margin-bottom:18px;
-
-            font-size:15px;
+            font-size:22px;
         }
 
         button{
 
-            width:100%;
-
             background:#38bdf8;
-
-            color:black;
 
             border:none;
 
-            padding:16px;
+            padding:24px;
 
-            border-radius:16px;
+            border-radius:22px;
+
+            font-size:24px;
 
             font-weight:bold;
 
             cursor:pointer;
-
-            transition:0.3s;
         }
 
-        button:hover{
-
-            transform:translateY(-2px);
-        }
-
-        .login-link{
+        .bottom-text{
 
             text-align:center;
 
-            margin-top:22px;
+            margin-top:35px;
+
+            font-size:20px;
         }
 
-        .login-link a{
+        .bottom-text a{
 
             color:#38bdf8;
 
             text-decoration:none;
+
+            font-weight:bold;
         }
 
     </style>
@@ -150,67 +150,79 @@
 
 <body>
 
-    <div class="register-container">
 
-        <div class="logo">
 
-            🤖 DevOps AI
+<div class="auth-box">
 
-        </div>
+    <div class="logo">
 
-        <h1>
-
-            Create Account
-
-        </h1>
-
-        <p>
-
-            Start your AI Workspace journey
-
-        </p>
-
-        <form method="POST">
-
-            <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            required>
-
-            <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required>
-
-            <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required>
-
-            <button type="submit">
-
-                Register
-
-            </button>
-
-        </form>
-
-        <div class="login-link">
-
-            Already have an account?
-
-            <a href="/login">
-
-                Login
-
-            </a>
-
-        </div>
+        🤖 DevOps AI
 
     </div>
+
+
+
+    <h1>
+
+        Welcome Back
+
+    </h1>
+
+
+
+    <div class="subtitle">
+
+        Login to your AI Workspace
+
+    </div>
+
+
+
+    <form
+    method="POST"
+    action="/login">
+
+
+
+        <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required>
+
+
+
+        <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required>
+
+
+
+        <button type="submit">
+
+            Login
+
+        </button>
+
+    </form>
+
+
+
+    <div class="bottom-text">
+
+        Don't have an account?
+
+        <a href="/register">
+
+            Register
+
+        </a>
+
+    </div>
+
+</div>
 
 </body>
 </html>

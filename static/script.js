@@ -426,19 +426,93 @@ function copyGeneratedCode(){
 
 
 /* =========================================
-   VOICE
+   REAL VOICE RECOGNITION
 ========================================= */
+
+let recognition;
+
+let voiceEnabled = false;
+
 
 function toggleVoice(){
 
-    alert(
-        "Voice system enabled"
-    );
+
+    if(
+
+        !(
+            'webkitSpeechRecognition'
+            in window
+        )
+
+    ){
+
+        alert(
+
+            "Voice recognition not supported"
+        );
+
+        return;
+    }
+
+
+    if(!recognition){
+
+        recognition =
+        new webkitSpeechRecognition();
+
+
+        recognition.continuous =
+        false;
+
+        recognition.interimResults =
+        false;
+
+        recognition.lang =
+        "en-US";
+
+
+        recognition.onresult =
+        function(event){
+
+            const transcript =
+            event.results[0][0].transcript;
+
+
+            document.getElementById(
+                "user-input"
+            ).value = transcript;
+        };
+
+
+        recognition.onerror =
+        function(event){
+
+            console.log(event);
+        };
+    }
+
+
+    if(!voiceEnabled){
+
+        recognition.start();
+
+        voiceEnabled = true;
+
+        alert(
+            "Voice recognition started"
+        );
+
+    }else{
+
+        recognition.stop();
+
+        voiceEnabled = false;
+
+        alert(
+            "Voice recognition stopped"
+        );
+    }
 }
-
-
-
-
 
 /* =========================================
    WORKSPACE TABS
